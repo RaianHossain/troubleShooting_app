@@ -15,6 +15,16 @@ class CreateResolvesTable extends Migration
     {
         Schema::create('resolves', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedBigInteger('bid_id')->nullable();
+            $table->unsignedBigInteger('issue_id')->nullable();
+            $table->unsignedBigInteger('winner_id')->nullable();
+            $table->string('start_date')->nullable();
+            $table->string('submission_date')->nullable();
+            $table->integer('extension_count')->default(0);
+            $table->string('extended_date')->nullable();
+
+
             $table->timestamps();
         });
     }

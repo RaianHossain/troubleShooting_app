@@ -15,16 +15,16 @@ class CreateBidsTable extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('issue_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('center');
-            $table->double('score');
-            $table->integer('timeToFix');
-            $table->string('sendBackDate');
-            $table->string('needSupport');
-            $table->string('needSpare');
-            $table->integer('possibleCost');
-            $table->string('haveExistingTask');
+            $table->unsignedBigInteger('issue_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('center')->nullable();
+            $table->double('score')->nullable();
+            $table->integer('timeToFix')->nullable();
+            $table->string('sendBackDate')->nullable();
+            $table->string('needSupport')->nullable();
+            $table->string('needSpare')->nullable();
+            $table->integer('possibleCost')->nullable();
+            $table->string('haveExistingTask')->nullable();
             $table->timestamps();
         });
     }

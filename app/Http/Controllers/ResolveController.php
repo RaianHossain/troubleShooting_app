@@ -2,9 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Issue;
+use App\Models\Resolve;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ResolveController extends Controller
 {
-    //
+    public function index()
+    {
+        $resolves = Resolve::latest()->get(); 
+        foreach($resolves as $resolve)
+        {
+            $resolve->user = $resolve->user;
+            $resolve->winner = $resolve->winner;
+            $resolve->issue = $resolve->issue;
+            $resolve->bid = $resolve->bid;
+        }       
+        return view('resolves.index', compact('resolves'));
+    }
+
+    public function create()
+    {
+        $issues = Issue::all();
+        $users = User::all();
+        return view('resolves.create', compact('issues', 'users'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $resolve = Resolve::create([
+            'user_id' => $data['user_id'] ?? null,
+            'bid_id' => $data['bid_id'] ?? null,
+            'issue_id' => $data['issue_id'] ?? null,
+            'winner_id' => $data['winner_id'] ?? null,
+            'start_date' => $data['start_date'] ?? null,
+            'submission_date' => $data['submission_date'] ?? null,
+            'extension_count' => $data['extension_count'] ?? 0,
+            'extended_date' => $data['extended_date'] ?? null,
+        ]);
+
+        return redirect()->route('resolves.index')->withMessage('Successfully Created');
+    }
+
+    public function delete($resolve_id)
+    {
+        $resolve = Resolve::where('id', $resolve_id)->first()->delete();
+        return redirect()->route('resolves.index')->withMessage('Successfully deleted');
+    }
 }

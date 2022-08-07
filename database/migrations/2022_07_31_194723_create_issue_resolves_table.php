@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIssueResolveTable extends Migration
+class CreateIssueResolvesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateIssueResolveTable extends Migration
      */
     public function up()
     {
-        Schema::create('issue_resolve', function (Blueprint $table) {
+        Schema::create('issue_resolves', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('winner_id');
+            $table->unsignedBigInteger('winner_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('issue_id')->nullable();
+            $table->unsignedBigInteger('bid_id')->nullable();
             $table->integer('extension_Count')->nullable();
             $table->date('extended_date')->nullable();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

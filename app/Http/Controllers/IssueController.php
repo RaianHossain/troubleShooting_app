@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bid;
 use App\Models\Issue;
+use App\Models\IssueResolve;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -16,8 +18,70 @@ class IssueController extends Controller
         {
             $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
         }
-        // dd($issues);
+       
         return view('issues.index', compact('issues'));
+    }
+
+    public function pendingIndex()
+    {
+        $issues = Issue::where("status", "pending")->get();
+        foreach($issues as $issue)
+        {
+            $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
+        }
+        return view('issues.pending-index', compact('issues'));
+    }
+
+    public function runningIndex()
+    {
+        $issues = Issue::where("status", "running")->get();
+        foreach($issues as $issue)
+        {
+            $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
+        }
+        return view('issues.running-index', compact('issues'));
+    }
+
+    public function doneIndex()
+    {
+        $issues = Issue::where("status", "done")->get();
+        foreach($issues as $issue)
+        {
+            $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
+        }
+        return view('issues.done-index', compact('issues'));
+    }
+
+    public function myUploaded($user_id)
+    {
+        $issues = Issue::where("user_id", $user_id)->get();
+        foreach($issues as $issue)
+        {
+            $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
+        }
+        return view('issues.my-uploaded', compact('issues'));
+    }
+
+    public function mySolved($user_id)
+    {
+        $resolveHistories = IssueResolve::where('user_id', $user_id)->get();
+        $issues = array();
+        foreach($resolveHistories as $resolveHistory)
+        {
+            array_push($issues, $resolveHistory->winner->issue);
+        }
+        return view('issues.my-solved', compact('issues'));
+    }
+
+    public function myBidded($user_id)
+    {
+        $bids = Bid::where('user_id', $user_id)->get();
+        $issues = array();
+        foreach($bids as $bid)
+        {
+            array_push($issues, $bid->issue);
+        }
+        return view('issues.my-bidded', compact('issues'));
     }
 
     public function create()
@@ -51,5 +115,19 @@ class IssueController extends Controller
         // dd($issue_id);
         $issue = Issue::where('id', $issue_id)->first()->delete();
         return redirect()->route('issues.index');
+    }
+
+    public function tasksToAssign()
+    {
+        $issuesTemp = Issue::where('status', 'pending')->get();
+        $issues = array();
+        foreach($issuesTemp as $issueTemp)
+        {
+            if(count($issueTemp->bids) > 0){
+                array_push($issues, $issueTemp);
+            }
+        }
+        // dd($issues);
+        return view('issues.tasks-to-assign', compact('issues'));
     }
 }

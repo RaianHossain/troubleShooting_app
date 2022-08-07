@@ -9,4 +9,9 @@ class IssueResolve extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function winner()
+    {
+        return $this->belongsTo(Winner::class);
+    }
 }

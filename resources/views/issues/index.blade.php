@@ -13,8 +13,15 @@
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
 
+    
     <a href="{{ route('issues.create') }}" class="btn btn-warning mb-3">Create New</a>
-
+    
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session()->get('message') }}
+        </div>
+    @endif
+    
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>

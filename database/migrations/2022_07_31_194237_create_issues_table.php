@@ -25,7 +25,7 @@ class CreateIssuesTable extends Migration
             $table->string('photo')->nullable();
             $table->string('solve_note')->nullable();
             $table->timestamps();
-            $table->string('center');
+            $table->string('center')->nullable();
         });
     }
 

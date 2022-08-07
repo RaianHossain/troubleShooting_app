@@ -15,14 +15,12 @@ class CreateWinnersTable extends Migration
     {
         Schema::create('winners', function (Blueprint $table) {
             $table->id();
-            $table->date('endingAt');
+            $table->stirng('endingAt')->nullable();
             $table->unsignedBigInteger('issue_id')->nullable();
             $table->unsignedBigInteger('bid_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('bid_id')->references('id')->on('bids');
-            $table->integer('position');
-            $table->integer('extensionCount');
-            $table->integer('extended_date')->nullable();
+            $table->integer('position')->nullable();
+            $table->integer('extensionCount')->default(0);
+            $table->string('extended_date')->nullable();
             $table->timestamps();
         });
     }
