@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bid;
 use App\Models\Issue;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BidController extends Controller
@@ -57,7 +58,18 @@ class BidController extends Controller
         ]);
 
         //Score Calculation function
-        $bid->score = 100;
+        $now= Issue::where('id', $data['issue_id'])->first()->created_at;
+        $date=Carbon::parse($bid->sendBackDate);
+        $days = $date->diffInDays($now);
+        if($bid->haveExistingTask='yes')
+        {
+            $haveTask=5;
+        }
+        else{
+            $haveTask=0;
+        }
+        $bid->score =($days*6)+$haveTask+($bid->possibleCost*4)+($bid->needSpare*3)
+                    +($bid->timeToFix*2)+$bid->needSupport;
         $bid->update();
 
         return redirect()->route('bids.index')->withMessage('Successfully Created');

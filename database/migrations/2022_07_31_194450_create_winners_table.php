@@ -15,7 +15,7 @@ class CreateWinnersTable extends Migration
     {
         Schema::create('winners', function (Blueprint $table) {
             $table->id();
-            $table->stirng('endingAt')->nullable();
+            $table->string('endingAt')->nullable();
             $table->unsignedBigInteger('issue_id')->nullable();
             $table->unsignedBigInteger('bid_id')->nullable();
             $table->integer('position')->nullable();

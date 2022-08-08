@@ -20,7 +20,7 @@ class CreateBidsTable extends Migration
             $table->string('center')->nullable();
             $table->double('score')->nullable();
             $table->integer('timeToFix')->nullable();
-            $table->string('sendBackDate')->nullable();
+            $table->date('sendBackDate')->nullable();
             $table->string('needSupport')->nullable();
             $table->string('needSpare')->nullable();
             $table->integer('possibleCost')->nullable();

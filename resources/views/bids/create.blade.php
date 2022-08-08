@@ -67,7 +67,7 @@
 
             <div class="form-group">
                 <label for="sendBackDate">Send Back Date</label>
-                <input type="text" class="form-control" id="sendBackDate" aria-describedby="sendBackDateHelp" name="sendBackDate">
+                <input type="date" class="form-control" id="sendBackDate" aria-describedby="sendBackDateHelp" name="sendBackDate">
                 <small id="sendBackDateHelp" class="form-text text-muted">Send Back Date</small>
             </div>
 
