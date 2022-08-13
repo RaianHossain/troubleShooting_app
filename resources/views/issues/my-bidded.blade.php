@@ -14,7 +14,6 @@
     </x-slot>
 
     
-    <a href="{{ route('issues.create') }}" class="btn btn-warning mb-3">Create New</a>
     
     @if(session()->has('message'))
         <div class="alert alert-success">
@@ -46,7 +45,7 @@
                     @foreach($issues as $issue)
                         <tr>
                             <td>{{ ++$sl }}</td>
-                            <td>{{ $issue->uploaded_by->name ?? '' }}</td>
+                            <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>

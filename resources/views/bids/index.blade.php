@@ -16,6 +16,40 @@
     
     <a href="{{ route('bids.create') }}" class="btn btn-warning mb-3">Create New</a>
 
+    @if(count($winners) > 0)
+    <div class="w-50">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Winner
+            </div>
+            <div class="card-body">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Center</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $sl = 0; @endphp
+                        @foreach($winners as $winner)
+                            <tr>
+                                <th scope="row">{{ ++$sl }}</th>
+                                <td>{{ $winner->user->name }}</td>
+                                <td>{{ $winner->score }}</td>
+                                <td>{{ $winner->user->center->name }}</td>
+                            </tr>
+                        @endforeach 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @if(session()->has('message'))
         <div class="alert alert-success">
             {{ session()->get('message') }}

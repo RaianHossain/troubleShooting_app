@@ -11,10 +11,7 @@
             <li class="breadcrumb-item active">Done Issues</li>
 
         </x-backend.layouts.elements.breadcrumb>
-    </x-slot>
-
-    
-    <a href="{{ route('issues.create') }}" class="btn btn-warning mb-3">Create New</a>
+    </x-slot>    
     
     @if(session()->has('message'))
         <div class="alert alert-success">
@@ -53,7 +50,6 @@
                                 <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
                                     @csrf
                                     @method('delete')
-
                                     <button onclick="return confirm('Are you sure want to delete ?')" class="btn btn-sm btn-danger" type="submit">Delete</button>
                                 </form>
                             </td>

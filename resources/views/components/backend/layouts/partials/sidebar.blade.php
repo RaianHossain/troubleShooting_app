@@ -16,6 +16,7 @@
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('roles.index') }}">Role</a>
+                                    <a class="nav-link" href="{{ route('centers.index') }}">Centers</a>
                                     <a class="nav-link" href="{{ route('users.index') }}">User</a>
                                     <a class="nav-link" href="{{ route('issues.index') }}">Issues</a>
                                     <a class="nav-link" href="{{ route('bids.index') }}">Bids</a>
@@ -56,7 +57,11 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Usage</div>
-                            <a class="nav-link" href="{{ route('issues.pendingIndex') }}">
+                            <a class="nav-link" href="{{ route('issues.uploadAnIssue') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Upload an Issue
+                            </a>
+                            <a class="nav-link" href="{{ route('issues.biddableIssues') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Bid
                             </a>

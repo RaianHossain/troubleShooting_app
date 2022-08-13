@@ -18,7 +18,15 @@
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li class="text-center">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 btn btn-sm btn-warning">
+                                    {{ __('Log Out') }}
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </li>
             </ul>

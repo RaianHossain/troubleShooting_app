@@ -11,10 +11,7 @@
             <li class="breadcrumb-item active">Running Issues</li>
 
         </x-backend.layouts.elements.breadcrumb>
-    </x-slot>
-
-    
-    <a href="{{ route('issues.create') }}" class="btn btn-warning mb-3">Create New</a>
+    </x-slot>    
     
     @if(session()->has('message'))
         <div class="alert alert-success">

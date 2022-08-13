@@ -130,4 +130,36 @@ class IssueController extends Controller
         // dd($issues);
         return view('issues.tasks-to-assign', compact('issues'));
     }
+
+    public function uploadAnIssue()
+    {
+        // dd("UploadAnIssue");
+        return view('issues.upload-an-issue');
+    }
+
+    public function biddableIssues()
+    {
+        $issues = Issue::where('status', 'pending')->latest()->get();
+        // dd($issues);
+        return view('issues.biddable-issues', compact('issues'));
+    }
+
+    public function upload(Request $request)
+    {
+        // dd($request->all());
+        $issue = Issue::create([
+            'user_id' => auth()->user()->id,
+            'alarm'   => $request->alarm,
+            'occuring_time'   => $request->occuring_time,
+            'problem_history'   => $request->problem_history,
+            'description'   => $request->description,
+            'steps_taken'   => $request->steps_taken,
+            'status' => 'pending',
+            'center' => auth()->user()->center->name,
+
+        ]);
+
+        return redirect()->route('issues.biddableIssues')->withMessage('Successfully uploaded');
+
+    }
 }

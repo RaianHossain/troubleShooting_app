@@ -24,13 +24,16 @@ class BidController extends Controller
 
     public function showBids($issue_id)
     {
-        $bids = Bid::where('issue_id', $issue_id)->get();
+        $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')->get();
+        $bids = Bid::where('issue_id', $issue_id)->latest()->get();
         foreach($bids as $bid)
         {
             $bid->user = $bid->user;
             $bid->issue = $bid->issue;
         }
-        return view('bids.index', compact('bids'));
+        
+        // dd($bids);
+        return view('bids.index', compact('bids', 'winners'));
     }
 
     public function create()
@@ -80,4 +83,35 @@ class BidController extends Controller
         $bid = Bid::where('id', $bid_id)->first()->delete();
         return redirect()->route('bids.index')->withMessage('Successfully deleted');
     }
+
+    public function bidAnIssue($issue_id)
+    {
+        // dd($issue_id);
+        $issue = Issue::where('id', $issue_id)->firstOrFail();
+        return view('bids.bid-an-issue', compact('issue'));
+    }
+
+    public function bidStore(Request $request)
+    {
+        // $date = Carbon::createFromFormat('Y-m-d', $request->sendBackDate)->format('d-m-Y');
+        // dd($date);
+        $bid = Bid::create([
+            'issue_id'    => $request->issue_id,
+            'user_id'     => auth()->user()->id,
+            'center'      => auth()->user()->center->name,
+            'timeToFix'    => $request->timeToFix,
+            'sendBackDate'    => $request->sendBackDate,
+            'needSupport'    => $request->needSupport,
+            'needSpare'    => $request->needSpare,
+            'possibleCost'    => $request->possibleCost,
+            'haveExistingTask'    => $request->haveExistingTask,
+        ]);
+
+        $bid->score = 100;
+        $bid->update();
+        
+        return redirect()->route('issues.myBidded', ['user_id' => auth()->user()->id])->withMessage("Successfully Bidded");
+    }
+
+    
 }
