@@ -58,43 +58,62 @@
                     <label class="input-group-text" for="inputGroupSelect02">User</label>
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="timeToFix">Time To Fix</label>
                 <input type="number" class="form-control" id="timeToFix" aria-describedby="timeToFixHelp" name="timeToFix">
-                <small id="timeToFixHelp" class="form-text text-muted">Time To Fix</small>
             </div>
+            <br>
 
             <div class="form-group">
                 <label for="sendBackDate">Send Back Date</label>
                 <input type="date" class="form-control" id="sendBackDate" aria-describedby="sendBackDateHelp" name="sendBackDate">
-                <small id="sendBackDateHelp" class="form-text text-muted">Send Back Date</small>
             </div>
+            <br>
 
-            <div class="form-group">
-                <label for="needSupport">Need Support</label>
-                <input type="text" class="form-control" id="needSupport" aria-describedby="needSupportHelp" name="needSupport">
-                <small id="needSupportHelp" class="form-text text-muted">Need Support</small>
+            <p>Need Support?</p>
+            <div class="d-flex justify-content-between" style="width:10%">
+                <div>
+                    <input type="radio" id="yes" name="needSupport" value="1">
+                    <label for="yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" id="no" name="needSupport" value="0">
+                    <label for="no">No</label>
+                </div>
             </div>
+            <br>
 
-            <div class="form-group">
-                <label for="needSpare">Need Spare</label>
-                <input type="text" class="form-control" id="needSpare" aria-describedby="needSpareHelp" name="needSpare">
-                <small id="needSpareHelp" class="form-text text-muted">Need Spare</small>
+            <p>Need Spare?</p>
+            <div class="d-flex justify-content-between" style="width:10%">
+                <div>
+                    <input type="radio" id="yes" name="needSpare" value="1">
+                    <label for="yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" id="no" name="needSpare" value="0">
+                    <label for="no">No</label>
+                </div>
             </div>
+            <br>
+
 
             <div class="form-group">
                 <label for="possibleCost">Possible Cost</label>
                 <input type="number" class="form-control" id="possibleCost" aria-describedby="possibleCostHelp" name="possibleCost">
-                <small id="possibleCostHelp" class="form-text text-muted">Possible Cost</small>
             </div>
+            <br>
 
             <p>Have Existing Task:</p>
-            <input type="radio" id="yes" name="haveExistingTask" value="yes">
-            <label for="html">Yes</label><br>
-            <input type="radio" id="no" name="haveExistingTask" value="no">
-            <label for="no">No</label>
-            <br>
+            <div class="d-flex justify-content-between" style="width:10%">
+                <div>
+                    <input type="radio" id="yes" name="haveExistingTask" value="1">
+                    <label for="yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" id="no" name="haveExistingTask" value="0">
+                    <label for="no">No</label>
+                </div>
+            </div>
             <br>
            
             <button type="submit" class="btn btn-primary">Submit</button>

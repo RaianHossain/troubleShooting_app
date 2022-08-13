@@ -24,7 +24,8 @@ class BidController extends Controller
 
     public function showBids($issue_id)
     {
-        $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')->get();
+        $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')
+        ->take(3)->get();
         $bids = Bid::where('issue_id', $issue_id)->latest()->get();
         foreach($bids as $bid)
         {
@@ -93,8 +94,8 @@ class BidController extends Controller
 
     public function bidStore(Request $request)
     {
-        // $date = Carbon::createFromFormat('Y-m-d', $request->sendBackDate)->format('d-m-Y');
-        // dd($date);
+       
+        //dd($request->all());
         $bid = Bid::create([
             'issue_id'    => $request->issue_id,
             'user_id'     => auth()->user()->id,
@@ -107,7 +108,22 @@ class BidController extends Controller
             'haveExistingTask'    => $request->haveExistingTask,
         ]);
 
-        $bid->score = 100;
+        //$bid->score = 100;
+        //Score Calculation function
+        $now= Issue::where('id', $request->issue_id)->first()->created_at;
+        $date=Carbon::parse($request->sendBackDate);
+        $days = $date->diffInDays($now);
+        if($bid->haveExistingTask == 'yes')
+        {
+            $haveTask=5;
+        }
+        else{
+            $haveTask=0;
+        }
+        $score = ($days*6)+$haveTask+($bid->possibleCost*4)+($bid->needSpare*3)
+                    +($bid->timeToFix*2)+$bid->needSupport;
+        //dd($score);
+        $bid->score = $score;
         $bid->update();
         
         return redirect()->route('issues.myBidded', ['user_id' => auth()->user()->id])->withMessage("Successfully Bidded");

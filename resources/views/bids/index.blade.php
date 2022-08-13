@@ -16,7 +16,7 @@
     
     <a href="{{ route('bids.create') }}" class="btn btn-warning mb-3">Create New</a>
 
-    @if(count($winners) > 0)
+    @if(isset($winners) && count($winners) > 0)
     <div class="w-50">
         <div class="card mb-4">
             <div class="card-header">
