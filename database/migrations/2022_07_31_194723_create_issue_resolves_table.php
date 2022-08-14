@@ -33,6 +33,6 @@ class CreateIssueResolvesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('issue_resolve');
+        Schema::dropIfExists('issue_resolves');
     }
 }
