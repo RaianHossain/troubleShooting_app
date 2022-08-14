@@ -51,4 +51,16 @@ class ResolveController extends Controller
         $resolve = Resolve::where('id', $resolve_id)->first()->delete();
         return redirect()->route('resolves.index')->withMessage('Successfully deleted');
     }
+
+    public function resolvingNow($user_id)
+    {
+        // dd("Ok");
+        $resolvingNow = Resolve::where('user_id', $user_id)->firstOrFail();        
+        return view('resolves.resolving-now', compact('resolvingNow'));
+    }
+
+    public function extendRequest(Request $request)
+    {
+        dd($request->all());
+    }
 }

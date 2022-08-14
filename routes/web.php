@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'create')->name('winners.create');
         Route::delete('/delete/{winner_id}', 'delete')->name('winners.delete');
         Route::post('/', 'store')->name('winners.store');
+        Route::get('/assing/{issue_id}', 'assign')->name('winners.assign');
     });
     
     Route::controller(ResolveController::class)->prefix('resolves')->group(function () {
@@ -94,6 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'create')->name('resolves.create');
         Route::delete('/delete/{resolve_id}', 'delete')->name('resolves.delete');
         Route::post('/', 'store')->name('resolves.store');
+        Route::post('/extend-request', 'extendRequest')->name('resolves.extendRequest');
     });
     
     Route::controller(IssueResolveController::class)->prefix('issueResolves')->group(function () {
@@ -111,7 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
     
     // Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-    Route::get('/resolving-now', [ResolveController::class, 'resolvingNow'])->name('resolving_now');
+    Route::get('/resolving-now/{user_id}', [ResolveController::class, 'resolvingNow'])->name('resolving_now');
     Route::get('/task-to-assign', [IssueController::class, 'tasksToAssign'])->name('task_to_assign');
 });
 

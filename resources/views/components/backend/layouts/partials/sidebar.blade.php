@@ -65,7 +65,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Bid
                             </a>
-                            <a class="nav-link" href="{{ route('resolving_now') }}">
+                            <a class="nav-link" href="{{ route('resolving_now', ['user_id' => auth()->user()->id]) }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Resolving Now
                             </a>

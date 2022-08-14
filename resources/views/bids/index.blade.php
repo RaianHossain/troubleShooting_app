@@ -23,7 +23,7 @@
                 <i class="fas fa-table me-1"></i>
                 Winner
             </div>
-            <div class="card-body">
+            <div class="card-body text-center">
                 <table class="table table-dark">
                     <thead>
                         <tr>
@@ -45,6 +45,7 @@
                         @endforeach 
                     </tbody>
                 </table>
+                <a href="{{ route('winners.assign', ['issue_id' => $winners[0]->issue_id]) }}" class="btn btn-primary">Assign</a>
             </div>
         </div>
     </div>
