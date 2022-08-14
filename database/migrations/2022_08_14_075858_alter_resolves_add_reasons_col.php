@@ -16,7 +16,7 @@ class AlterResolvesAddReasonsCol extends Migration
         Schema::table('resolves', function (Blueprint $table) {
             if(!Schema::hasColumn('resolves', 'reason'))
             {
-                $table->string('reason');
+                $table->string('reason')->nullable();
             }
 
         });
