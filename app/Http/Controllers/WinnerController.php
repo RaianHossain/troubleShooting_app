@@ -69,7 +69,7 @@ class WinnerController extends Controller
                     'bid_id'   =>  $winner->id,
                     'issue_id'   =>  $winner->issue_id,
                     'winner_id'   =>  $winner->id,
-                    'submission_date'   =>  $winner->created_at->format('Y-m-d'),
+                    'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
                     'extension_count'  => 0,                    
                 ]);
             }

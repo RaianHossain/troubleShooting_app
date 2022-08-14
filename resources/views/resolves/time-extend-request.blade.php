@@ -48,8 +48,8 @@
                             <td>{{ $request->user->name ?? '' }}</td>
                             <td>{{ $request->issue->alarm ?? '' }}</td>
                             <td>
-                                <a href="#" class="btn btn-warning">Approve</a>
-                                <a href="#" class="btn btn-warning">Reject</a>
+                                <a href="{{ route('resolves.approve', ['resolve_id' => $request->resolve_id, 'request_id' => $request->id]) }}" class="btn btn-warning">Approve</a>
+                                <a href="{{ route('resolves.reject', ['resolve_id' => $request->resolve_id, 'request_id' => $request->id]) }}" class="btn btn-warning">Reject</a>
                             </td>
                         </tr>
                     @endforeach

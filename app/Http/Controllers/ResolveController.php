@@ -6,6 +6,8 @@ use App\Models\Issue;
 use App\Models\Resolve;
 use App\Models\User;
 use App\Models\ExtendRequest;
+use App\Models\IssueResolve;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ResolveController extends Controller
@@ -56,8 +58,13 @@ class ResolveController extends Controller
     public function resolvingNow($user_id)
     {
         // dd("Ok");
-        $resolvingNow = Resolve::where('user_id', $user_id)->firstOrFail();        
-        return view('resolves.resolving-now', compact('resolvingNow'));
+        $resolvingNow = Resolve::where('user_id', $user_id)->firstOrFail();    
+        
+        $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date);  
+        $resolvingNow->created_at = Carbon::parse($resolvingNow->created_at);  
+
+        $requests = ExtendRequest::where('resolve_id', $resolvingNow->id)->get();
+        return view('resolves.resolving-now', compact('resolvingNow', 'requests'));
     }
 
     public function extendRequest(Request $request)
@@ -80,6 +87,53 @@ class ResolveController extends Controller
     {
        $requests = ExtendRequest::where('approved', 0)->latest()->get();
        return view('resolves.time-extend-request', compact('requests'));
-       //dd($requests);
+    }
+
+    public function approveRequest($resolve_id, $request_id)
+    {
+        $resolve = Resolve::where('id', $resolve_id)->firstOrFail();
+        $submissionDate = Carbon::parse($resolve->submission_date);
+        $newSubmissionDate = $submissionDate->addDay()->format('Y-m-d');
+
+        $resolve->submission_date = $newSubmissionDate;
+        $resolve->extension_count += 1;
+        $resolve->update();
+
+        $request = ExtendRequest::where('id', $request_id)->firstOrFail();
+        $request->approved = 1;
+        $request->update();
+
+        return redirect()->route('resolves.timeExtendRequest')->withMessage("Successfully Approved");
+    }
+
+    public function rejectRequest($resolve_id, $request_id)
+    {
+        dd($resolve_id);
+    }
+
+    public function completeTask(Request $request)
+    {
+        dd($request->all());
+        $resolve = Resolve::where('id', $request->resolve_id)->firstOrFail();
+
+        //change issue status
+        $issue = Issue::where('id', $resolve->issue_id)->firstOrFail();
+        $issue->status = 'done';
+        $issue->solve_note = $request->solveNote;
+        // $issue->update();
+        
+        //make history
+        // $history = IssueResolve::create([
+        //     'user_id' => $resolve->user_id ?? null,
+        //     'issue_id' => $resolve->issue_id ?? null,
+        //     'bid_id'   => $resolve->bid_id ?? null,
+        //     'extension_count' => $resolve->extension_count ?? null,
+        //     'submission_date'  => $resolve->submission_date ?? null,
+        // ]);
+
+        //empty resolves table
+        // $resolve->delete();
+        
+
     }
 }

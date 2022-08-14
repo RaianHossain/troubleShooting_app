@@ -14,40 +14,72 @@
     </x-slot>
 
     <div class="mb-3">
-        <p>
-            <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
-                Extend Request
-            </button>  
-
-            <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
-                Complete
-            </button>
-        </p>
-        <div class="collapse" id="requestCollapse">
-            <div class="card card-body">
-                <form action="{{ route('resolves.extendRequest') }}" method="post">
-                    @csrf 
-                    <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
-                    <textarea name="reason" id="reason" cols="30" rows="5" class="w-100"></textarea>
-                    <div class="w-100 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-sm btn-info mt-3" style="width: 10%;">Submit</button>
-                    </div>
-                </form>
+        <div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <p>
+                        <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
+                            Extend Request
+                        </button>  
+            
+                        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
+                            Complete
+                        </button>
+                    </p>
+                </div>
+                <div>
+                @if(isset($requests) && count($requests) > 0)
+                <div>
+                    @php $counter = 1; @endphp
+                    @foreach($requests as $request)            
+                        <span class="{{ $request->approved == 1 ? 'badge bg-success' : 'badge bg-warning' }}">Request-{{ $counter }}: {{ $request->approved == 1 ? "Approved" : "Pending" }}</span>
+                    @endforeach
+                </div>
+                @endif
+                </div>
+            </div>            
+    
+            <div class="collapse" id="requestCollapse">
+                <div class="card card-body">
+                    <form action="{{ route('resolves.extendRequest') }}" method="post">
+                        @csrf 
+                        <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
+                        <textarea name="reason" id="reason" cols="30" rows="5" class="w-100"></textarea>
+                        <div class="w-100 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-sm btn-info mt-3" style="width: 10%;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    
+            <div class="collapse" id="completeCollapse">
+                <div class="card card-body">
+                    <form action="{{ route('resolves.complete') }}" method="post">
+                        @csrf 
+                        <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
+                        <textarea name="solveNote" id="solveNote" cols="30" rows="5" class="w-100"></textarea>
+                        <div class="w-100 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-sm btn-info mt-3" style="width: 10%;">Finish</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
-        <div class="collapse" id="completeCollapse">
-            <div class="card card-body">
-                Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-            </div>
-        </div>
+        
     </div>
+
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session()->get('message') }}
+        </div>
+    @endif
 
     <div class="bg-secondary p-3">
         <div class="d-flex justify-content-between bg-light p-3 mb-3">
-            <h5>Start Date: </h5>
-            <h5>Counting</h5>
-            <h5>End Date:</h5>
+            <h5>Start Date: {{ $resolvingNow->created_at->format('d-M-Y') }}</h5>
+            <h5 id="counting">Counting</h5>
+            <h5>End Date: {{ $resolvingNow->submission_date->format('d-M-Y') }}</h5>
         </div>
 
         <div class="row g-0">
@@ -64,5 +96,39 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // $("#counting").on("click", ()=> {alert("just check")});
+        var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
+        // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+        var countDownDate = new Date(submission_date).getTime();
+
+
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the element with id="demo"
+        document.getElementById("counting").innerHTML = days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("counting").innerHTML = "EXPIRED";
+        }
+        }, 1000);
+    </script>
     
 </x-backend.layouts.master>

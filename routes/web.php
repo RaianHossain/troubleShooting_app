@@ -97,6 +97,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', 'store')->name('resolves.store'); 
         Route::post('/extend-request', 'extendRequest')->name('resolves.extendRequest'); 
         Route::get('/time-extend-request', 'timeExtendRequest')->name('resolves.timeExtendRequest'); 
+        Route::get('/time-extend-request-approve/{resolve_id}/{request_id}', 'approveRequest')->name('resolves.approve');
+        Route::get('/time-extend-request-reject/{resolve_id}/{request_id}', 'rejectRequest')->name('resolves.reject');
+        Route::post('/complete-task', 'completeTask')->name('resolves.complete');
     });
     
     Route::controller(IssueResolveController::class)->prefix('issueResolves')->group(function () {

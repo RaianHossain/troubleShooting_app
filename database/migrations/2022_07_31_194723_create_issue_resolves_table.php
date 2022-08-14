@@ -19,8 +19,8 @@ class CreateIssueResolvesTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('issue_id')->nullable();
             $table->unsignedBigInteger('bid_id')->nullable();
-            $table->integer('extension_Count')->nullable();
-            $table->date('extended_date')->nullable();
+            $table->integer('extension_count')->nullable();
+            $table->string('submission_date')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });
