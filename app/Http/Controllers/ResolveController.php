@@ -58,8 +58,11 @@ class ResolveController extends Controller
     public function resolvingNow($user_id)
     {
         // dd("Ok");
-        $resolvingNow = Resolve::where('user_id', $user_id)->firstOrFail();    
-        
+        $resolvingNow = Resolve::where('user_id', $user_id)->first();  
+        if(!isset($resolvingNow))
+        {
+             return view('resolves.resolving-now');
+        }        
         $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date);  
         $resolvingNow->created_at = Carbon::parse($resolvingNow->created_at);  
 
@@ -113,27 +116,26 @@ class ResolveController extends Controller
 
     public function completeTask(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $resolve = Resolve::where('id', $request->resolve_id)->firstOrFail();
 
         //change issue status
         $issue = Issue::where('id', $resolve->issue_id)->firstOrFail();
         $issue->status = 'done';
         $issue->solve_note = $request->solveNote;
-        // $issue->update();
+        $issue->update();
         
         //make history
-        // $history = IssueResolve::create([
-        //     'user_id' => $resolve->user_id ?? null,
-        //     'issue_id' => $resolve->issue_id ?? null,
-        //     'bid_id'   => $resolve->bid_id ?? null,
-        //     'extension_count' => $resolve->extension_count ?? null,
-        //     'submission_date'  => $resolve->submission_date ?? null,
-        // ]);
+        $history = IssueResolve::create([
+            'user_id' => $resolve->user_id ?? null,
+            'issue_id' => $resolve->issue_id ?? null,
+            'bid_id'   => $resolve->bid_id ?? null,
+            'extension_count' => $resolve->extension_count ?? null,
+            'submission_date'  => $resolve->submission_date ?? null,
+        ]);
 
         //empty resolves table
-        // $resolve->delete();
-        
-
+        $resolve->delete();
+        return redirect()->route('issues.mySolved', ['user_id' => auth()->user()->id])->withMessage("Congratulations! Successfully Completed!");
     }
 }

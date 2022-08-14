@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Center;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Resolve;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,6 +15,14 @@ class UserController extends Controller
         $users = User::latest()->get();    
          
         return view('users.index', compact('users'));
+    }
+
+    public function profile($user_id)
+    {
+        $user= User::where('id',$user_id)->firstOrFail();
+        //dd($user);
+        $resolves = Resolve::where('user_id',$user_id)->get();
+        return view('users.profile', compact('user','resolves'));
     }
 
     public function create()
