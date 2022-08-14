@@ -68,7 +68,7 @@ class IssueController extends Controller
         $issues = array();
         foreach($resolveHistories as $resolveHistory)
         {
-            array_push($issues, $resolveHistory->winner->issue);
+            array_push($issues, $resolveHistory->issue);
         }
         return view('issues.my-solved', compact('issues'));
     }

@@ -12,7 +12,7 @@
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
-
+    
     <div class="mb-3">
         <div>
             <div class="d-flex justify-content-between">
@@ -74,7 +74,7 @@
             {{ session()->get('message') }}
         </div>
     @endif
-
+    @if(isset($resolvingNow))
     <div class="bg-secondary p-3">
         <div class="d-flex justify-content-between bg-light p-3 mb-3">
             <h5>Start Date: {{ $resolvingNow->created_at->format('d-M-Y') }}</h5>
@@ -96,6 +96,9 @@
             </div>
         </div>
     </div>
+    @else
+    <h2>You are not resolving anything now.</h2>
+    @endif
     
     <script>
         // $("#counting").on("click", ()=> {alert("just check")});

@@ -119,6 +119,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/resolving-now/{user_id}', [ResolveController::class, 'resolvingNow'])->name('resolving_now');
     Route::get('/task-to-assign', [IssueController::class, 'tasksToAssign'])->name('task_to_assign');
+    Route::get('/profile/{user_id}', [UserController::class, 'profile'])->name('profile');
+
 });
 
 

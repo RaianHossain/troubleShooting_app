@@ -38,7 +38,6 @@
                         <th>Uploaded By</th>
                         <th>Alarm</th>                        
                         <th>Description</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,14 +48,6 @@
                             <td>{{ $issue->uploaded_by->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
-                            <td>
-                                <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-
-                                    <button onclick="return confirm('Are you sure want to delete ?')" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                </form>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
