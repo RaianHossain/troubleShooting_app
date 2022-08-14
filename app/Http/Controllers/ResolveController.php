@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Issue;
 use App\Models\Resolve;
 use App\Models\User;
+use App\Models\ExtendRequest;
 use Illuminate\Http\Request;
 
 class ResolveController extends Controller
@@ -64,10 +65,21 @@ class ResolveController extends Controller
         $resolvingNow = Resolve::where('id', $request->resolve_id)->firstOrFail();   
         $resolvingNow->reason=$request->reason;
         $resolvingNow->update();
+
+        $Request = ExtendRequest::create([
+            'reason' => $request->reason ?? null, 
+            'resolve_id' => $request->resolve_id ?? null,
+            'user_id' => $resolvingNow->user_id ?? null,
+            'issue_id' => $resolvingNow->issue_id ?? null
+        ]);
+
+        return redirect()->route('resolving_now', ['user_id' => auth()->user()->id])->withMessage("Successfully Submitted");
     }
 
     public function timeExtendRequest()
     {
-        
+       $requests = ExtendRequest::where('approved', 0)->latest()->get();
+       return view('resolves.time-extend-request', compact('requests'));
+       //dd($requests);
     }
 }

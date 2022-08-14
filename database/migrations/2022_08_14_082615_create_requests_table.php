@@ -19,6 +19,7 @@ class CreateRequestsTable extends Migration
             $table->unsignedBigInteger('resolve_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('issue_id')->nullable();
+            $table->integer('approved')->default(0);
             $table->timestamps();
         });
     }
