@@ -73,6 +73,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tasks To Assign
                             </a>
+                            <a class="nav-link" href="{{ route('resolves.timeExtendRequest') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Time Extend Request
+                            </a>
                             <a class="nav-link" href="tables.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Report

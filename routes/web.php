@@ -94,8 +94,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'index')->name('resolves.index');    
         Route::get('/create', 'create')->name('resolves.create');
         Route::delete('/delete/{resolve_id}', 'delete')->name('resolves.delete');
-        Route::post('/', 'store')->name('resolves.store');
-        Route::post('/extend-request', 'extendRequest')->name('resolves.extendRequest');
+        Route::post('/', 'store')->name('resolves.store'); 
+        Route::post('/extend-request', 'extendRequest')->name('resolves.extendRequest'); 
+        Route::get('/time-extend-request', 'timeExtendRequest')->name('resolves.timeExtendRequest'); 
     });
     
     Route::controller(IssueResolveController::class)->prefix('issueResolves')->group(function () {

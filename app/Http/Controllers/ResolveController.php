@@ -61,6 +61,13 @@ class ResolveController extends Controller
 
     public function extendRequest(Request $request)
     {
-        dd($request->all());
+        $resolvingNow = Resolve::where('id', $request->resolve_id)->firstOrFail();   
+        $resolvingNow->reason=$request->reason;
+        $resolvingNow->update();
+    }
+
+    public function timeExtendRequest()
+    {
+        
     }
 }
