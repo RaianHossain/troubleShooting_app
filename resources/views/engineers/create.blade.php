@@ -1,24 +1,24 @@
 <x-backend.layouts.master>
     <x-slot name="pageTitle">
-        Users Create
+        Engineers Create
     </x-slot>
 
     <x-slot name='breadCrumb'>
         <x-backend.layouts.elements.breadcrumb>
-            <x-slot name="pageHeader"> Users Create </x-slot>
+            <x-slot name="pageHeader"> Engineers Create </x-slot>
 
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-            <li class="breadcrumb-item active">Users Create</li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active">Engineers Create</li>
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
 
-    <a href="{{ route('users.index') }}"  class="btn btn-warning mb-3">List</a>
+    <a href="{{ route('engineers.index') }}"  class="btn btn-warning mb-3">List</a>
 
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Users Create
+            Engineers Create
 
         </div>
         <div class="card-body">
@@ -31,7 +31,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('users.store') }}" method="post">
+        <form action="{{ route('engineers.store') }}" method="post">
             @csrf
             
             <div class="form-group">
@@ -47,28 +47,17 @@
             </div>            
 
             <div class="input-group mb-3">
-                <select class="form-select" id="center_id" name="center_id">
-                    <option selected>Choose...</option>
+                <select class="form-select" aria-label="Default select example" name="center_id">
+                    <option selected>Choose One...</option>
                     @foreach($centers as $center)    
                         <option value="{{ $center->id }}">{{ $center->name }}</option>
                     @endforeach
                 </select>
+                
                 <div class="input-group-append">
                     <label class="input-group-text" for="inputGroupSelect02">Center</label>
                 </div>
-            </div>
-
-            <div class="input-group mb-3">
-                <select class="form-select" id="role_id" name="role_id">
-                    <option selected>Choose...</option>
-                    @foreach($roles as $role)    
-                        <option value="{{ $role->id }}">{{ $role->name }}</option>
-                    @endforeach
-                </select>
-                <div class="input-group-append">
-                    <label class="input-group-text" for="inputGroupSelect02">Role</label>
-                </div>
-            </div>
+            </div>           
            
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

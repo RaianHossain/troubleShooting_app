@@ -7,6 +7,7 @@ use App\Models\Resolve;
 use App\Models\User;
 use App\Models\ExtendRequest;
 use App\Models\IssueResolve;
+use App\Models\Winner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -61,7 +62,7 @@ class ResolveController extends Controller
         $resolvingNow = Resolve::where('user_id', $user_id)->first();  
         if(!isset($resolvingNow))
         {
-             return view('resolves.resolving-now');
+             return view('resolves.not-resolving-anything');
         }        
         $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date);  
         $resolvingNow->created_at = Carbon::parse($resolvingNow->created_at);  
@@ -137,5 +138,46 @@ class ResolveController extends Controller
         //empty resolves table
         $resolve->delete();
         return redirect()->route('issues.mySolved', ['user_id' => auth()->user()->id])->withMessage("Congratulations! Successfully Completed!");
+    }
+
+    public function giveup(Request $request)
+    {
+        $resolve = Resolve::where('id', $request->resolve_id)->first();
+        $winner = Winner::where('id', $resolve->winner_id)->first();
+        $winners = Winner::where('issue_id', $winner->issue_id)->get();
+
+        if(count($winners) > 1)
+        {
+            if($winner->position < 3)
+            {
+                $nextWinner = $winners->where('position', ($winner->position + 1))->first();
+                if($nextWinner)
+                {
+                    $newResolve = Resolve::create([
+                        'user_id' => $nextWinner->bid->user_id ?? null,
+                        'bid_id'  => $nextWinner->bid_id ?? null,
+                        'issue_id' => $nextWinner->issue_id ?? null,
+                        'winner_id' => $nextWinner->id ?? null,
+                        'previous_resolve_note' => $request->previous_resolve_note ?? null
+                    ]);
+                    $timeToFixToDay = ceil($nextWinner->bid->timeToFix / 24);
+
+                    $newSubmissionDate = Carbon::parse($newResolve->created_at)->addDay($timeToFixToDay)->format('Y-m-d');
+
+                    $newResolve->submission_date = $newSubmissionDate;
+                    $newResolve->update();
+
+                    //notification
+                }else{
+                    //notification
+                }
+            }else{
+                //notification
+            }
+        }
+
+        $resolve->delete();
+
+        return redirect()->route('issues.biddableIssues')->withMessage('Nice try...! Want to try another one?');
     }
 }

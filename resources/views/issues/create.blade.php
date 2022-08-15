@@ -34,14 +34,25 @@
         <form action="{{ route('issues.store') }}" method="post">
             @csrf
             <div class="input-group mb-3">
-                <select class="custom-select" id="user_id" name="user_id">
+                <select class="form-select" id="user_id" name="user_id">
                     <option selected>Choose...</option>
                     @foreach($users as $user)    
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach
                 </select>
                 <div class="input-group-append">
-                    <label class="input-group-text" for="inputGroupSelect02">user</label>
+                    <label class="input-group-text" for="user_id">User</label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <select class="form-select" id="center_id" name="center_id">
+                    <option selected>Choose...</option>
+                    @foreach($centers as $center)    
+                        <option value="{{ $center->id }}">{{ $center->name }} - {{ $center->city }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-append">
+                    <label class="input-group-text" for="center_id">Center</label>
                 </div>
             </div>
             <div class="form-group">

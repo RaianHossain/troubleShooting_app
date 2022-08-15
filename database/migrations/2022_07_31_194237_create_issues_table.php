@@ -22,10 +22,14 @@ class CreateIssuesTable extends Migration
             $table->string('description')->nullable();
             $table->string('steps_taken')->nullable();
             $table->string('status')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('imageOne')->nullable();
             $table->string('solve_note')->nullable();
             $table->timestamps();
-            $table->string('center')->nullable();
+            $table->unsignedBigInteger('center_id')->nullable();
+            $table->string('code')->nullable();
+            $table->string('imageTwo')->nullable();
+            $table->string('imageThree')->nullable();
+
         });
     }
 

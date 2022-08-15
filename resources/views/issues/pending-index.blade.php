@@ -47,6 +47,7 @@
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>
+                                <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
                                 <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>
                                 <a href="{{ route('bids.index', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-warning">Show Bids</a>
                                 <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">

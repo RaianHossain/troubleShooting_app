@@ -35,7 +35,7 @@
             @csrf
 
             <div class="input-group mb-3">
-                <select class="custom-select" id="issue_id" name="issue_id">
+                <select class="form-select" id="issue_id" name="issue_id">
                     <option selected>Choose...</option>
                     @foreach($issues as $issue)    
                         <option value="{{ $issue->id }}">{{ $issue->alarm }}</option>
@@ -47,7 +47,7 @@
             </div>
 
             <div class="input-group mb-3">
-                <select class="custom-select" id="bid_id" name="bid_id">
+                <select class="form-select" id="bid_id" name="bid_id">
                     <option selected>Choose...</option>
                     @foreach($bids as $bid)    
                         <option value="{{ $bid->id }}">{{ $bid->user->name }}</option>

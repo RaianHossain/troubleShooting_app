@@ -29,19 +29,8 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('issues.uplaod') }}" method="post">
-            @csrf
-            {{--<div class="input-group mb-3">
-                <select class="custom-select" id="user_id" name="user_id">
-                    <option selected>Choose...</option>
-                    @foreach($users as $user)    
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
-                </select>
-                <div class="input-group-append">
-                    <label class="input-group-text" for="inputGroupSelect02">user</label>
-                </div>
-            </div>--}}
+        <form action="{{ route('issues.uplaod') }}" method="post" enctype="multipart/form-data">
+            @csrf            
             <div class="form-group">
                 <label for="alarm">Alarm</label>
                 <input type="text" class="form-control" id="alarm" aria-describedby="alarmHelp" name="alarm">
@@ -67,6 +56,22 @@
                 <input type="text" class="form-control" id="steps_taken" aria-describedby="steps_taken_help" name="steps_taken">
                 <small id="steps_taken_help" class="form-text text-muted">What was the steps taken</small>
             </div>
+            <div class="form-group">
+                <label for="imageOne" class="form-label">Picture One</label>
+                <input class="form-control" type="file" id="imageOne" name="imageOne" aria-describedby="imageOnehelp">
+                <small id="imageOnehelp" class="form-text text-muted">Upload a picture</small>
+            </div>
+            <div class="form-group">
+                <label for="imageTwo" class="form-label">Picture Two</label>
+                <input class="form-control" type="file" id="imageTwo" name="imageTwo" aria-describedby="imageTwohelp">
+                <small id="imageTwohelp" class="form-text text-muted">Upload a picture</small>
+            </div>
+            <div class="form-group">
+                <label for="imageThree" class="form-label">Picture</label>
+                <input class="form-control" type="file" id="imageThree" name="imageThree" aria-describedby="imageThreehelp">
+                <small id="imageThreehelp" class="form-text text-muted">Upload a picture</small>
+            </div>
+            <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         

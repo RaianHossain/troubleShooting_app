@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EngineerController;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\IssueResolveController;
 use App\Http\Controllers\NotificationController;
@@ -49,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/upload-an-issue', 'uploadAnIssue')->name('issues.uploadAnIssue');
         Route::get('/issues-for-bid', 'biddableIssues')->name('issues.biddableIssues');
         Route::post('/upload-an-issue/store', 'upload')->name('issues.uplaod');
+        Route::get('/show/{issue_id}', 'show')->name('issues.show');
     });
     
     Route::controller(RoleController::class)->prefix('roles')->group(function () {
@@ -100,6 +102,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/time-extend-request-approve/{resolve_id}/{request_id}', 'approveRequest')->name('resolves.approve');
         Route::get('/time-extend-request-reject/{resolve_id}/{request_id}', 'rejectRequest')->name('resolves.reject');
         Route::post('/complete-task', 'completeTask')->name('resolves.complete');
+        Route::post('/give-up', 'giveup')->name('resolves.giveup');
     });
     
     Route::controller(IssueResolveController::class)->prefix('issueResolves')->group(function () {
@@ -107,6 +110,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'create')->name('issueResolves.create');
         Route::delete('/delete/{issueResolve_id}', 'delete')->name('issueResolves.delete');
         Route::post('/', 'store')->name('issueResolves.store');
+    });
+
+    Route::controller(EngineerController::class)->prefix('engineers')->group(function () {
+        Route::get('/', 'index')->name('engineers.index');    
+        Route::get('/create', 'create')->name('engineers.create');
+        Route::delete('/delete/{engineer_id}', 'delete')->name('engineers.delete');
+        Route::post('/', 'store')->name('engineers.store');
     });
     
     Route::controller(NotificationController::class)->prefix('notifications')->group(function () {

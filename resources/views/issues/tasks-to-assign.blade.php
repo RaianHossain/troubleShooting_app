@@ -50,6 +50,7 @@
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>
+                                <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
                                 <a href="{{ route('bids.showBids', ['issue_id' => $issue->id]) }}" class="btn btn-warning">Show Bids</a>
                                 <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
                                     @csrf

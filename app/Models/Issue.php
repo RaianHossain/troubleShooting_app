@@ -19,4 +19,9 @@ class Issue extends Model
     {
         return $this->hasMany(Bid::class);
     }
+
+    public function center()
+    {
+        return $this->hasMany(Center::class);
+    }
 }

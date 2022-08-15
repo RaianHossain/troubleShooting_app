@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bid;
+use App\Models\Center;
 use App\Models\Issue;
 use App\Models\IssueResolve;
 use App\Models\User;
@@ -20,6 +21,12 @@ class IssueController extends Controller
         }
        
         return view('issues.index', compact('issues'));
+    }
+
+    public function show($issue_id)
+    {
+        $issue = Issue::where('id', $issue_id)->first();
+        return view('issues.show', compact('issue'));
     }
 
     public function pendingIndex()
@@ -87,14 +94,13 @@ class IssueController extends Controller
     public function create()
     {
         $users = User::all();
-        return view('issues.create', compact('users'));
+        $centers = Center::all();
+        return view('issues.create', compact('users', 'centers'));
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
-        $center = User::where('id', $data['user_id'])->first()->center->name;
-        // dd($center);
 
         $issue = Issue::create([
             'user_id' => $data['user_id'],
@@ -104,8 +110,12 @@ class IssueController extends Controller
             'description' => $data['description'],
             'steps_taken' => $data['steps_taken'],
             'status' => "pending",
-            'center' => $center,
+            'center_id' => $data['center_id'],
         ]);
+
+        $code = $this->generateIssueCode($issue, $data['center_id']);
+        $issue->code = $code;        
+        $issue->update();
 
         return redirect()->route('issues.index')->withMessage('Successfully Created');
     }
@@ -155,11 +165,53 @@ class IssueController extends Controller
             'description'   => $request->description,
             'steps_taken'   => $request->steps_taken,
             'status' => 'pending',
-            'center' => auth()->user()->center->name,
+            'center_id' => auth()->user()->center->id,
 
         ]);
 
+        if($request->file('imageOne')){
+            $file= $request->file('imageOne');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('Images/Issues'), $filename);
+            $issue->imageOne = $filename;
+        }
+        if($request->file('imageTwo')){
+            $file= $request->file('imageTwo');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('Images/Issues'), $filename);
+            $issue->imageTwo = $filename;
+        }
+        if($request->file('imageThree')){
+            $file= $request->file('imageThree');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('Images/Issues'), $filename);
+            $issue->imageThree = $filename;
+        }
+
+        $code = $this->generateIssueCode($issue, null);
+        $issue->code = $code;        
+        $issue->update();
+
         return redirect()->route('issues.biddableIssues')->withMessage('Successfully uploaded');
 
+    }
+
+    public function generateIssueCode($issue, $center_id = null)
+    {
+        $date = $issue->created_at->format('d-m-Y');
+        $date = str_replace("-","_", $date);
+        $alarm = $issue->alarm;
+        $centerLocation = '';
+        if($center_id == null)
+        {
+            $centerLocation = auth()->user()->center->city;
+        }else{
+            $center = Center::where('id', $center_id)->first();
+            $centerLocation = $center->city;            
+        }
+        
+        $code = $date."_".$centerLocation."_".$alarm;
+
+        return $code;
     }
 }

@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('ui/css/login.css') }}">
-    <title>Login</title>
+    <title>Register</title>
   </head>
   <body>
     
@@ -28,26 +28,15 @@
                 <!-- Validation Errors -->
                 <x-auth-validation-errors class="mb-4 alert alert-danger" :errors="$errors" />
 
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    {{--<div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                        <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-                        <button type="button" class="btn btn-primary btn-floating mx-1">
-                        <i class="fab fa-facebook-f"></i>
-                        </button>
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf                   
 
-                        <button type="button" class="btn btn-primary btn-floating mx-1">
-                        <i class="fab fa-twitter"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-primary btn-floating mx-1">
-                        <i class="fab fa-linkedin-in"></i>
-                        </button>
+                    <!-- Name input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form3Example2" class="form-control form-control-lg"
+                        placeholder="Enter a your name" name="name" />
+                        <label class="form-label" for="form3Example2">Name</label>
                     </div>
-
-                    <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0">Or</p>
-                    </div>--}}
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
@@ -63,22 +52,17 @@
                         <label class="form-label" for="form3Example4">Password</label>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- Checkbox -->
-                        <div class="form-check mb-0">
-                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                        <label class="form-check-label" for="form2Example3">
-                            Remember me
-                        </label>
-                        </div>
-                        <a href="#!" class="text-body">Forgot password?</a>
-                    </div>
+                    <div class="form-outline mb-3">
+                        <input type="password" id="form3Example5" class="form-control form-control-lg"
+                        placeholder="Enter password" name="password_confirmation"/>
+                        <label class="form-label" for="form3Example5">Password Confirmation</label>
+                    </div>                    
 
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button type="submit" class="btn btn-primary btn-lg"
-                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="{{ route('register') }}"
-                            class="link-danger">Register</a></p>
+                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Already Have An Account <a href="{{ route('login') }}"
+                            class="link-danger">Login</a></p>
                     </div>
                 </form>
             </div>

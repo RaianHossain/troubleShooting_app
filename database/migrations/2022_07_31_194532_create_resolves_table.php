@@ -23,6 +23,7 @@ class CreateResolvesTable extends Migration
             $table->string('submission_date')->nullable();
             $table->integer('extension_count')->default(0);
             $table->string('extended_date')->nullable();
+            $table->string('previous_resolve_note', 10000)->nullable();
 
 
             $table->timestamps();

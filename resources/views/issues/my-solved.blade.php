@@ -38,6 +38,7 @@
                         <th>Uploaded By</th>
                         <th>Alarm</th>                        
                         <th>Description</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +49,9 @@
                             <td>{{ $issue->uploaded_by->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
+                            <td>
+                                <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

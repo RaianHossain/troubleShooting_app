@@ -35,8 +35,8 @@
         <form action="{{ route('bids.store') }}" method="post">
             @csrf
             
-            <div class="input-group mb-3">
-                <select class="custom-select" id="issue_id" name="issue_id">
+            <div class="input-group mb-3">                
+                <select class="form-select" id="issue_id" name="issue_id">
                     <option selected>Choose...</option>
                     @foreach($issues as $issue)    
                         <option value="{{ $issue->id }}">{{ $issue->alarm }}</option>
@@ -48,7 +48,7 @@
             </div>
 
             <div class="input-group mb-3">
-                <select class="custom-select" id="user_id" name="user_id">
+                <select class="form-select" id="user_id" name="user_id">
                     <option selected>Choose...</option>
                     @foreach($users as $user)    
                         <option value="{{ $user->id }}">{{ $user->name }}</option>

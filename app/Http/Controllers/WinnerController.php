@@ -6,6 +6,7 @@ use App\Models\Bid;
 use App\Models\Issue;
 use App\Models\Resolve;
 use App\Models\Winner;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WinnerController extends Controller
@@ -55,7 +56,7 @@ class WinnerController extends Controller
         $sl = 1;
         foreach($winners as $winner)
         {
-            Winner::create([
+            $newWinner = Winner::create([
                 'endingAt' => $winner->sendBackDate,
                 'issue_id' => $winner->issue_id,
                 'bid_id' => $winner->id,
@@ -64,11 +65,12 @@ class WinnerController extends Controller
             ]);   
             if($sl == 1)
             {
+                $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
                 Resolve::create([
                     'user_id'   =>  $winner->user_id,
                     'bid_id'   =>  $winner->id,
                     'issue_id'   =>  $winner->issue_id,
-                    'winner_id'   =>  $winner->id,
+                    'winner_id'   =>  $newWinner->id,
                     'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
                     'extension_count'  => 0,                    
                 ]);

@@ -38,7 +38,7 @@
                 <select class="custom-select" id="issue_id" name="issue_id">
                     <option selected>Choose...</option>
                     @foreach($issues as $issue)    
-                        <option value="{{ $issue->id }}">{{ $issue->alarm }}</option>
+                        <option value="{{ $issue->id }}">{{ $issue->code }}</option>
                     @endforeach
                 </select>
                 <div class="input-group-append">
@@ -61,7 +61,7 @@
             <div class="form-group">
                 <label for="issue_id">Issue</label>
                 <select class="form-control" id="issue_id" aria-describedby="issue_idHelp" name="issue_id">
-                    <option value="{{ $issue->id }}">{{ $issue->alarm }}</option>
+                    <option value="{{ $issue->id }}">{{ $issue->code }}</option>
                 </select>
             </div>
             <br>

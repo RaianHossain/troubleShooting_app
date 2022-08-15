@@ -18,13 +18,19 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <p>
-                        <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
                             Extend Request
                         </button>  
-            
-                        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
-                            Complete
+
+                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#giveUpCollapse" aria-expanded="false" aria-controls="collapseExample">
+                            Give Up
                         </button>
+
+                        {{--<a href="{{ route('resolves.giveup', ['resolve_id' => $resolvingNow->id]) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Give Up</a>--}}
+            
+                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
+                            Complete
+                        </button>                        
                     </p>
                 </div>
                 <div>
@@ -46,7 +52,20 @@
                         <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
                         <textarea name="reason" id="reason" cols="30" rows="5" class="w-100"></textarea>
                         <div class="w-100 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-sm btn-info mt-3" style="width: 10%;">Submit</button>
+                            <button type="submit" class="btn btn-sm btn-success mt-3" style="width: 10%;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="collapse" id="giveUpCollapse">
+                <div class="card card-body">
+                    <form action="{{ route('resolves.giveup') }}" method="post">
+                        @csrf 
+                        <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
+                        <textarea name="previous_resolve_note" id="previous_resolve_note" cols="30" rows="5" class="w-100"></textarea>
+                        <div class="w-100 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-sm btn-success mt-3" style="width: 10%;">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -59,7 +78,7 @@
                         <input type="hidden" name="resolve_id" value="{{ $resolvingNow->id }}">
                         <textarea name="solveNote" id="solveNote" cols="30" rows="5" class="w-100"></textarea>
                         <div class="w-100 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-sm btn-info mt-3" style="width: 10%;">Finish</button>
+                            <button type="submit" class="btn btn-sm btn-success mt-3" style="width: 10%;">Finish</button>
                         </div>
                     </form>
                 </div>
@@ -74,9 +93,9 @@
             {{ session()->get('message') }}
         </div>
     @endif
-    @if(isset($resolvingNow))
-    <div class="bg-secondary p-3">
-        <div class="d-flex justify-content-between bg-light p-3 mb-3">
+    
+    <div class="bg-dark p-3">
+        <div class="d-flex justify-content-between bg-white p-3 mb-3">
             <h5>Start Date: {{ $resolvingNow->created_at->format('d-M-Y') }}</h5>
             <h5 id="counting">Counting</h5>
             <h5>End Date: {{ $resolvingNow->submission_date->format('d-M-Y') }}</h5>
@@ -84,21 +103,27 @@
 
         <div class="row g-0">
             <div class="col-md-5">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAElBMVEXy8vL////6+vr19fX4+Pj8/Px/aeudAAACoklEQVR4nO3c227bMBBF0cgk//+XGwu6kRxeRnFaVGevt8a2AG3QQ0kN8vUFAAAAAAAAAAAAAAAAAAAAAACAv2j5Ba9/fVK/hVgOxHL4Prf0+qD08FgfPbfw8Fjpk8cjlgOxHIjlQCwHYjlIxgoh3DqeXqyQbl+Ky8VK551L9B5PLFb40X2eWKyf3RVrxUpFrMU36KVihbKV88pCKtarfjzlWlpSsepWvh1RPZbr3JVi1SPLObSUYlkri1g7ZpZDGau6zGI3PJWxjKHV+3gqv6NSsXxX8KkqoxWrXFq98R7rkaYVq6jVaxWMpScWK6vVPW9rqKnF2r5e71e6G6G5+vRifZ9zjHFwyZDM9acYayx7PHEOeWIZ4pI5ViGxatW16/UFYlUfsy/HiFUx7iC3oxCrZDx73oc8sQrRarUNeWLlrKepx5AnVqbZaq0lHytmd3/tVu8jqccK2VuMjfA65NVjLdf3mBvhKYjHStuaWTU2wkst6Vj71+64MBiTjXV+7cL2dmK1XJdS+W9i5bI2qfoJsYpXy1rDEa8aq7ymitYPibWqr6nWIT+spRjL+sJNbYmCsexR3n5FOpYdYmZL1IvVmkxrif6WKBerPcXHW6JarN7SGW6JYrH6Q2m0JYrF6rYabolasQatRluiVKzJG5rmXFOKNXhyvOpuiUKxJh4rLP0tUSfW3JPj7ddm1GNNtuptiTKxxsN9194SVWLNDPesifUBkVhzw33X2hI1Ys0O911jS9SI5WzVukuUiDU/3A/vj1XrUSHWjVb2/44JxPJshEWYl/GzJzpieYf7ztgSHx/rbitrS3x8rDsDa7MeJ+0UYn2K9i+zOT09Fn8ueNbCH6Ked3+utxGLWMQCAAAAAAAAAAAAAAAAAAAAAAD4//0BUyATTom0AxcAAAAASUVORK5CYII=" alt="" style="width: 98%; height: 400px;">
+                <div style="width: 98%;">
+                    <img src="{{ $resolvingNow->issue->imageOne ? asset('Images/Issues/'.$resolvingNow->issue->imageOne) : '' }}" alt="" style="width: 100%; height: 400px;">
+                </div>
+
+                <div class="d-flex">
+                    <img src="{{ $resolvingNow->issue->imageTwo ? asset('Images/Issues/'.$resolvingNow->issue->imageTwo) : '' }}" alt="" style="width: 15%; height: 100px; margin-right: 5px">
+
+                    <img src="{{ $resolvingNow->issue->imageThree ? asset('Images/Issues/'.$resolvingNow->issue->imageThree) : '' }}" alt="" style="width: 15%; height: 100px;">
+                </div>
             </div>
-            <div class="col-md-7 bg-light p-3" style="overflow: hidden;">
+            <div class="col-md-7 bg-white p-3" style="overflow: hidden;">
                 <h5><u>Alarm:</u> {{ $resolvingNow->issue->alarm }}</h5>
                 <h5><u>Description:</u> {{ $resolvingNow->issue->description }}</h5>
                 <h5><u>Occuring Time:</u> {{ $resolvingNow->issue->occuring_time }}</h5>
                 <h5><u>Problem History:</u> {{ $resolvingNow->issue->problem_history }}</h5>
                 <h5><u>Steps Taken:</u> {{ $resolvingNow->issue->steps_taken }}</h5>
+                <h5><u>Previous Solve Note:</u> {{ $resolvingNow->previous_resolve_note ?? 'No solve note' }}</h5>
                 
             </div>
         </div>
-    </div>
-    @else
-    <h2>You are not resolving anything now.</h2>
-    @endif
+    </div>   
     
     <script>
         // $("#counting").on("click", ()=> {alert("just check")});
