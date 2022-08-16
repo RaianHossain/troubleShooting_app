@@ -1,14 +1,14 @@
 <x-backend.layouts.master>
     <x-slot name="pageTitle">
-        My Bidded
+        Items To Ship
     </x-slot>
 
     <x-slot name='breadCrumb'>
         <x-backend.layouts.elements.breadcrumb>
-            <x-slot name="pageHeader"> My Bidded </x-slot>
+            <x-slot name="pageHeader"> Items To Ship </x-slot>
 
             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-            <li class="breadcrumb-item active">My Bidded</li>
+            <li class="breadcrumb-item active">Items To Ship</li>
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
@@ -24,7 +24,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Issues
+            Items To Ship
 
         </div>
         <div class="card-body">
@@ -35,10 +35,9 @@
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
-                        <th>Alarm</th>     
-                        <th>Code</th>                   
+                        <th>Alarm</th>    
+                        <th>Code</th>                    
                         <th>Description</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -47,19 +46,17 @@
                     @foreach($issues as $issue)
                         <tr>
                             <td>{{ ++$sl }}</td>
-                            <td>{{ $issue->user->name ?? '' }}</td>
-                            <td>{{ ucfirst($issue->alarm) ?? '' }}</td>
+                            <td>{{ $issue->uploaded_by->name ?? '' }}</td>
+                            <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
-                            <td>{{ ucfirst($issue->description) ?? '' }}</td>
-                            <td>{{ ucfirst($issue->status) ?? '' }}</td>
+                            <td>{{ $issue->description ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-
-                                    <button onclick="return confirm('Are you sure want to delete ?')" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                </form>
+                                @if($issue->shipped_date)
+                                <a href="#" class="btn btn-sm btn-success">Shipped</a>
+                                @else
+                                <a href="{{ route('resolves.shipped', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-primary"  onclick="return confirm('Are you sure?')">Ship</a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

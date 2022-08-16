@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bid;
 use App\Models\Issue;
 use App\Models\Resolve;
 use App\Models\User;
@@ -59,14 +60,16 @@ class ResolveController extends Controller
     public function resolvingNow($user_id)
     {
         // dd("Ok");
-        $resolvingNow = Resolve::where('user_id', $user_id)->first();  
+        $resolvingsNow = Resolve::where('user_id', $user_id)->first();
+        
         if(!isset($resolvingNow))
         {
              return view('resolves.not-resolving-anything');
-        }        
-        $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date);  
-        $resolvingNow->created_at = Carbon::parse($resolvingNow->created_at);  
-
+        }    
+        if($resolvingNow->received_date){
+            $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date); 
+            $resolvingNow->received_date = Carbon::parse($resolvingNow->received_date);
+        }    
         $requests = ExtendRequest::where('resolve_id', $resolvingNow->id)->get();
         return view('resolves.resolving-now', compact('resolvingNow', 'requests'));
     }
@@ -153,31 +156,120 @@ class ResolveController extends Controller
                 $nextWinner = $winners->where('position', ($winner->position + 1))->first();
                 if($nextWinner)
                 {
-                    $newResolve = Resolve::create([
-                        'user_id' => $nextWinner->bid->user_id ?? null,
-                        'bid_id'  => $nextWinner->bid_id ?? null,
-                        'issue_id' => $nextWinner->issue_id ?? null,
-                        'winner_id' => $nextWinner->id ?? null,
-                        'previous_resolve_note' => $request->previous_resolve_note ?? null
-                    ]);
-                    $timeToFixToDay = ceil($nextWinner->bid->timeToFix / 24);
-
-                    $newSubmissionDate = Carbon::parse($newResolve->created_at)->addDay($timeToFixToDay)->format('Y-m-d');
-
-                    $newResolve->submission_date = $newSubmissionDate;
-                    $newResolve->update();
-
+                    $user = User::where('id', $nextWinner->bid->user_id)->first();
+                    $howManyResolvingNow = Resolve::where('user_id', $user->id)->get()->count();
+                    if($howManyResolvingNow > 0){
+                        $doesUserWantToTakeMore = User::where('id', $winner->bid->user_id)->first()->up_for_more;
+                        if($doesUserWantToTakeMore == 1)
+                        {
+                            $this->makeResolve($nextWinner, $request);                            
+                        }else{
+                            $nextWinner = $winners->where('position', ($winner->position + 2))->first();
+                            if($nextWinner)
+                            {
+                                $user = User::where('id', $nextWinner->bid->user_id)->first();
+                                $howManyResolvingNow = Resolve::where('user_id', $user->id)->get()->count();
+                                if($howManyResolvingNow > 0)
+                                {
+                                    $doesUserWantToTakeMore = User::where('id', $winner->bid->user_id)->first()->up_for_more;
+                                    if($doesUserWantToTakeMore == 1)
+                                    {
+                                        $this->makeResolve($nextWinner, $request);
+                                    }else{
+                                        //haven't fixed yet
+                                        $issue = Issue::where('id', $nextWinner->issue_id)->first();
+                                        $issue->status = 'needForceAssign';
+                                        $issue->update();
+                                    }
+                                }else{
+                                    $this->makeResolve($nextWinner, $request);
+                                }
+                            }else{
+                                //notification
+                                //force assign
+                                $issue = Issue::where('id', $nextWinner->issue_id)->first();
+                                $issue->status = 'needForceAssign';
+                                $issue->update();
+                            }
+                        }
+                    }else{
+                        $this->makeResolve($nextWinner, $request);
+                    }
+                    
                     //notification
                 }else{
                     //notification
+                    //force
+                    $resolve->delete();
+                    $issue = Issue::where('id', $nextWinner->issue_id)->first();
+                    $issue->status = 'needForceAssign';
+                    $issue->update();
                 }
             }else{
                 //notification
+                //force assign
+                $issue = Issue::where('id', $resolve->issue_id)->first();
+                $issue->status = 'needForceAssign';
+                $issue->update();
             }
         }
 
         $resolve->delete();
 
         return redirect()->route('issues.biddableIssues')->withMessage('Nice try...! Want to try another one?');
+    }
+
+    public function ship($issue_id)
+    {
+        $resolve = Resolve::where('issue_id', $issue_id)->first();
+        $resolve->shipped_date = Carbon::now();
+        $resolve->update();
+
+        return redirect()->route('issues.toShip', ['user_id' => auth()->user()->id])->withMessage("Successfully updated");
+    }
+
+    public function receive($resolve_id)
+    {
+        $resolve = Resolve::where('id', $resolve_id)->first();
+        $resolve->received_date = Carbon::now();
+        $sendBack = Carbon::parse($resolve->bid->sendBackDate);
+        $bidCreateDate = $resolve->bid->created_at;
+        $dateDiff = $bidCreateDate->diffInDays($sendBack) + 1;
+        $submission_date = $resolve->received_date->addDay($dateDiff);
+        $resolve->submission_date = $submission_date->format('Y-m-d');
+        $resolve->received_date = $resolve->received_date->format('Y-m-d');
+        $resolve->update();
+
+        return redirect()->route('resolving_now', ['user_id' => auth()->user()->id]);
+    }
+
+    public function makeResolve($nextWinner, $request)
+    {
+        $newResolve = Resolve::create([
+                        'user_id' => $nextWinner->bid->user_id ?? null,
+                        'bid_id'  => $nextWinner->bid_id ?? null,
+                        'issue_id' => $nextWinner->issue_id ?? null,
+                        'winner_id' => $nextWinner->id ?? null,
+                        'previous_resolve_note' => $request->previous_resolve_note ?? null
+                    ]);
+        $timeToFixToDay = ceil($nextWinner->bid->timeToFix / 24);
+
+        $newSubmissionDate = Carbon::parse($newResolve->created_at)->addDay($timeToFixToDay)->format('Y-m-d');
+
+        $newResolve->submission_date = $newSubmissionDate;
+        $newResolve->update();
+    }
+
+    public function forceAssign($issue_id)
+    {
+        $issue = Issue::where('id', $issue_id)->first();
+        $users = User::all();
+        $bids = Bid::where('issue_id', $issue_id)->get();
+        foreach($bids as $bid)
+        {
+            $bid->assigned = Resolve::where('user_id', $bid->user->id)->get()->count();
+            $bid->up_for_more = User::where('id', $bid->user->id)->first()->up_for_more;
+        }
+        return view('resolves.create-force-assign', compact('issue', 'users', 'bids'));
     }
 }

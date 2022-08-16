@@ -39,6 +39,7 @@
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="{{ route('issues.pendingIndex') }}">Pending Issues</a>
+                                            <a class="nav-link" href="{{ route('issues.assignedIndex') }}">Assigned Issues</a>
                                             <a class="nav-link" href="{{ route('issues.runningIndex') }}">Running Issues</a>
                                             <a class="nav-link" href="{{ route('issues.doneIndex') }}">Done Issues</a>
                                         </nav>
@@ -49,9 +50,9 @@
                                     </a>
                                     <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="{{ route('issues.myUploaded', ['user_id' => 1]) }}">My Uploaded</a>
-                                            <a class="nav-link" href="{{ route('issues.mySolved', ['user_id' => 1]) }}">My Solved</a>
-                                            <a class="nav-link" href="{{ route('issues.myBidded', ['user_id' => 1]) }}">My Bidded</a>
+                                            <a class="nav-link" href="{{ route('issues.myUploaded', ['user_id' => auth()->user()->id]) }}">My Uploaded</a>
+                                            <a class="nav-link" href="{{ route('issues.mySolved', ['user_id' => auth()->user()->id]) }}">My Solved</a>
+                                            <a class="nav-link" href="{{ route('issues.myBidded', ['user_id' => auth()->user()->id]) }}">My Bidded</a>
                                         </nav>
                                     </div>
                                 </nav>
@@ -69,9 +70,17 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Resolving Now
                             </a>
+                            <a class="nav-link" href="{{ route('issues.toShip', ['user_id' => auth()->user()->id]) }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Items to ship
+                            </a>
                             <a class="nav-link" href="{{ route('task_to_assign') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tasks To Assign
+                            </a>
+                            <a class="nav-link" href="{{ route('issues.force') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Issues For Force Assign
                             </a>
                             <a class="nav-link" href="{{ route('resolves.timeExtendRequest') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>

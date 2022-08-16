@@ -96,9 +96,10 @@
     
     <div class="bg-dark p-3">
         <div class="d-flex justify-content-between bg-white p-3 mb-3">
-            <h5>Start Date: {{ $resolvingNow->created_at->format('d-M-Y') }}</h5>
-            <h5 id="counting">Counting</h5>
-            <h5>End Date: {{ $resolvingNow->submission_date->format('d-M-Y') }}</h5>
+            <h5>Start Date: {{ $resolvingNow->received_date ? $resolvingNow->received_date->format('d-M-Y') : '' }}</h5>
+            <h5 id="counting">Waiting</h5>
+            <h5>End Date: {{ $resolvingNow->submission_date ? $resolvingNow->submission_date->format('d-M-Y') : '' }}</h5>
+            <input type="hidden" id="sub_date" value="{{ $resolvingNow->submission_date ?? null }}">
         </div>
 
         <div class="row g-0">
@@ -120,13 +121,23 @@
                 <h5><u>Problem History:</u> {{ $resolvingNow->issue->problem_history }}</h5>
                 <h5><u>Steps Taken:</u> {{ $resolvingNow->issue->steps_taken }}</h5>
                 <h5><u>Previous Solve Note:</u> {{ $resolvingNow->previous_resolve_note ?? 'No solve note' }}</h5>
-                
+                <h4 class="bg-warning p-2 w-75"><u>Shipped Date:</u> {{ $resolvingNow->shipped_date ?? 'No yet shipped' }}</h4>
+                @if($resolvingNow->shipped_date)
+                @if($resolvingNow->received_date)
+                <h4 class="bg-warning p-2 w-75"><u>Received Date:</u> {{ $resolvingNow->received_date }}</h4>
+                @else
+                <div>
+                    <h4 class="bg-warning p-2 w-75"><u>Received Date:</u></h4>
+                    <a href="{{ route('resolves.receive', ['resolve_id' => $resolvingNow->id]) }}" class="btn btn-primary" onclick="return confirm('Are you sure?')">Receive</a>
+                </div>
+                @endif
+                @endif
             </div>
         </div>
     </div>   
     
+    @if($resolvingNow->submission_date && $resolvingNow->received_date)
     <script>
-        // $("#counting").on("click", ()=> {alert("just check")});
         var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
         // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
         var countDownDate = new Date(submission_date).getTime();
@@ -156,7 +167,8 @@
             clearInterval(x);
             document.getElementById("counting").innerHTML = "EXPIRED";
         }
-        }, 1000);
+        }, 1000);              
     </script>
+    @endif
     
 </x-backend.layouts.master>

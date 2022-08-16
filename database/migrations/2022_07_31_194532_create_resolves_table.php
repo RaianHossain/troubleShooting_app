@@ -24,6 +24,8 @@ class CreateResolvesTable extends Migration
             $table->integer('extension_count')->default(0);
             $table->string('extended_date')->nullable();
             $table->string('previous_resolve_note', 10000)->nullable();
+            $table->string('shipped_date')->nullable();
+            $table->string('received_date')->nullable();
 
 
             $table->timestamps();

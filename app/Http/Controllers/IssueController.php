@@ -6,6 +6,7 @@ use App\Models\Bid;
 use App\Models\Center;
 use App\Models\Issue;
 use App\Models\IssueResolve;
+use App\Models\Resolve;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -47,6 +48,17 @@ class IssueController extends Controller
             $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
         }
         return view('issues.running-index', compact('issues'));
+    }
+
+    public function assignedIndex()
+    {
+        $issues = Issue::where("status", "assigned")->get();
+        foreach($issues as $issue)
+        {
+            $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
+            $issue->to = Resolve::where('issue_id', $issue->id)->first()->user;
+        }
+        return view('issues.assigned-index', compact('issues'));
     }
 
     public function doneIndex()
@@ -213,5 +225,24 @@ class IssueController extends Controller
         $code = $date."_".$centerLocation."_".$alarm;
 
         return $code;
+    }
+
+    public function toShip($user_id)
+    {
+        $issues = Issue::where('user_id', $user_id)->where('status', 'assigned')->get();
+        foreach($issues as $issue)
+        {
+            $shipped_date = Resolve::where('issue_id', $issue->id)->first();
+            if($shipped_date->shipped_date){
+                $issue->shipped_date = $shipped_date->shipped_date;
+            }
+        }
+        return view('issues.items-to-ship', compact('issues'));
+    }
+
+    public function forceAssignIssues()
+    {
+        $issues = Issue::where('status', 'needForceAssign')->where('status', 'pending')->get();
+        return view('issues.force-assign-issues', compact('issues'));
     }
 }

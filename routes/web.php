@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'index')->name('issues.index');
         Route::get('/pending', 'pendingIndex')->name('issues.pendingIndex');
         Route::get('/running', 'runningIndex')->name('issues.runningIndex');
+        Route::get('/assigned', 'assignedIndex')->name('issues.assignedIndex');
         Route::get('/done', 'doneIndex')->name('issues.doneIndex');
         Route::get('/my-uploaded/{user_id}', 'myUploaded')->name('issues.myUploaded');
         Route::get('/my-solved/{user_id}', 'mySolved')->name('issues.mySolved');
@@ -51,6 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/issues-for-bid', 'biddableIssues')->name('issues.biddableIssues');
         Route::post('/upload-an-issue/store', 'upload')->name('issues.uplaod');
         Route::get('/show/{issue_id}', 'show')->name('issues.show');
+        Route::get('/items-to-ship/{user_id}', 'toShip')->name('issues.toShip');
+        Route::get('/force-assign/issues', 'forceAssignIssues')->name('issues.force');
+
     });
     
     Route::controller(RoleController::class)->prefix('roles')->group(function () {
@@ -89,7 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'create')->name('winners.create');
         Route::delete('/delete/{winner_id}', 'delete')->name('winners.delete');
         Route::post('/', 'store')->name('winners.store');
-        Route::get('/assing/{issue_id}', 'assign')->name('winners.assign');
+        Route::get('/assing/{issue_id}/{bid_id?}', 'assign')->name('winners.assign');
     });
     
     Route::controller(ResolveController::class)->prefix('resolves')->group(function () {
@@ -103,6 +107,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/time-extend-request-reject/{resolve_id}/{request_id}', 'rejectRequest')->name('resolves.reject');
         Route::post('/complete-task', 'completeTask')->name('resolves.complete');
         Route::post('/give-up', 'giveup')->name('resolves.giveup');
+        Route::get('/ship/{issue_id}', 'ship')->name('resolves.shipped');
+        Route::get('/receive/{resolve_id}', 'receive')->name('resolves.receive');
+        Route::get('/force-assign/{issue_id}', 'forceAssign')->name('resolves.force-assign');
+        
+
     });
     
     Route::controller(IssueResolveController::class)->prefix('issueResolves')->group(function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\Issue;
+use App\Models\Resolve;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,6 +27,13 @@ class BidController extends Controller
     {
         $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')
         ->take(3)->get();
+        if(count($winners) > 0){
+            foreach($winners as $winner)
+            {
+                $winner->assigned = Resolve::where('user_id', $winner->user_id)->get()->count();
+                $winner->up_for_more = User::where('id', $winner->user_id)->first()->up_for_more;
+            }
+        }
         $bids = Bid::where('issue_id', $issue_id)->latest()->get();
         foreach($bids as $bid)
         {
