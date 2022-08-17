@@ -74,7 +74,8 @@ class WinnerController extends Controller
                         'issue_id'   =>  $winner->issue_id,
                         'winner_id'   =>  $newWinner->id,
                         // 'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
-                        'extension_count'  => 0,                    
+                        'extension_count'  => 0,   
+                        'shipper_id' => $winner->issue->user_id,                 
                     ]);
                 }
                 $sl++;
@@ -99,7 +100,8 @@ class WinnerController extends Controller
                         'issue_id'   =>  $winner->issue_id,
                         'winner_id'   =>  $newWinner->id,
                         // 'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
-                        'extension_count'  => 0,                    
+                        'extension_count'  => 0, 
+                        'shipper_id' => $winner->issue->user_id,                   
                     ]);
                 }else{
                     $newWinner = Winner::create([

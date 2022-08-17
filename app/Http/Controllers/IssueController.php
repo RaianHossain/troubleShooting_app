@@ -229,7 +229,15 @@ class IssueController extends Controller
 
     public function toShip($user_id)
     {
-        $issues = Issue::where('user_id', $user_id)->where('status', 'assigned')->get();
+        // $issues = Issue::where('user_id', $user_id)->where('status', 'assigned')->get();
+        $tempIssues = Resolve::where('shipper_id', $user_id)->orderBy('id', 'ASC')->get();
+        $issues = array();
+        foreach($tempIssues as $tempIssue)
+        {
+            array_push($issues, $tempIssue->issue);
+        }
+        // dd($issues);
+
         foreach($issues as $issue)
         {
             $shipped_date = Resolve::where('issue_id', $issue->id)->first();
@@ -242,7 +250,7 @@ class IssueController extends Controller
 
     public function forceAssignIssues()
     {
-        $issues = Issue::where('status', 'needForceAssign')->where('status', 'pending')->get();
+        $issues = Issue::Where('status', 'needForceAssign')->orWhere('status', 'pending')->get();
         return view('issues.force-assign-issues', compact('issues'));
     }
 }

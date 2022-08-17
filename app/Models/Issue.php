@@ -24,4 +24,9 @@ class Issue extends Model
     {
         return $this->hasMany(Center::class);
     }
+
+    public function shipper()
+    {
+        return $this->belongsTo(User::class, 'shipper_id');
+    }
 }

@@ -14,7 +14,6 @@
     </x-slot>
 
     
-    <a href="{{ route('issues.create') }}" class="btn btn-warning mb-3">Create New</a>
     
     @if(session()->has('message'))
         <div class="alert alert-success">
@@ -24,9 +23,16 @@
     
     <div class="card mb-4">
         <div class="card-header">
-            <i class="fas fa-details me-1"></i>
+            <i class="fas fa-details me-1"></i><i class="fa-solid fa-book-bookmark"></i>
             Issues
-
+            @php
+                $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();
+            @endphp
+            @if(isset($bidded))
+            <a href="#" class="btn btn-sm btn-success">Bidded</a>  
+            @else
+            <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>  
+            @endif
         </div>
         <div class="card-body p-2">
             <div class="row bg-light g-0">

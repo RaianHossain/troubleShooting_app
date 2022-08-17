@@ -37,8 +37,8 @@
                 <small id="alarmHelp" class="form-text text-muted">What was the alarm.</small>
             </div>
             <div class="form-group">
-                <label for="occuring_time">Occuring Time</label>
-                <input type="text" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
+                <label for="occuring_time">Occuring Date</label>
+                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
@@ -67,7 +67,7 @@
                 <small id="imageTwohelp" class="form-text text-muted">Upload a picture</small>
             </div>
             <div class="form-group">
-                <label for="imageThree" class="form-label">Picture</label>
+                <label for="imageThree" class="form-label">Picture Three</label>
                 <input class="form-control" type="file" id="imageThree" name="imageThree" aria-describedby="imageThreehelp">
                 <small id="imageThreehelp" class="form-text text-muted">Upload a picture</small>
             </div>

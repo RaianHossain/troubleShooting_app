@@ -36,6 +36,7 @@ class ResolveController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $data = $request->all();
         $resolve = Resolve::create([
             'user_id' => $data['user_id'] ?? null,
@@ -60,7 +61,7 @@ class ResolveController extends Controller
     public function resolvingNow($user_id)
     {
         // dd("Ok");
-        $resolvingsNow = Resolve::where('user_id', $user_id)->first();
+        $resolvingNow = Resolve::where('user_id', $user_id)->first();
         
         if(!isset($resolvingNow))
         {
@@ -138,6 +139,7 @@ class ResolveController extends Controller
             'submission_date'  => $resolve->submission_date ?? null,
         ]);
 
+        //make history
         //empty resolves table
         $resolve->delete();
         return redirect()->route('issues.mySolved', ['user_id' => auth()->user()->id])->withMessage("Congratulations! Successfully Completed!");
@@ -159,7 +161,7 @@ class ResolveController extends Controller
                     $user = User::where('id', $nextWinner->bid->user_id)->first();
                     $howManyResolvingNow = Resolve::where('user_id', $user->id)->get()->count();
                     if($howManyResolvingNow > 0){
-                        $doesUserWantToTakeMore = User::where('id', $winner->bid->user_id)->first()->up_for_more;
+                        $doesUserWantToTakeMore = User::where('id', $nextWinner->bid->user_id)->first()->up_for_more;
                         if($doesUserWantToTakeMore == 1)
                         {
                             $this->makeResolve($nextWinner, $request);                            
@@ -171,7 +173,7 @@ class ResolveController extends Controller
                                 $howManyResolvingNow = Resolve::where('user_id', $user->id)->get()->count();
                                 if($howManyResolvingNow > 0)
                                 {
-                                    $doesUserWantToTakeMore = User::where('id', $winner->bid->user_id)->first()->up_for_more;
+                                    $doesUserWantToTakeMore = User::where('id', $nextWinner->bid->user_id)->first()->up_for_more;
                                     if($doesUserWantToTakeMore == 1)
                                     {
                                         $this->makeResolve($nextWinner, $request);
@@ -189,6 +191,7 @@ class ResolveController extends Controller
                                 //force assign
                                 $issue = Issue::where('id', $nextWinner->issue_id)->first();
                                 $issue->status = 'needForceAssign';
+                                $issue->shipper_id = $resolve->user_id;
                                 $issue->update();
                             }
                         }
@@ -203,6 +206,7 @@ class ResolveController extends Controller
                     $resolve->delete();
                     $issue = Issue::where('id', $nextWinner->issue_id)->first();
                     $issue->status = 'needForceAssign';
+                    $issue->shipper_id = $resolve->user_id;
                     $issue->update();
                 }
             }else{
@@ -210,10 +214,14 @@ class ResolveController extends Controller
                 //force assign
                 $issue = Issue::where('id', $resolve->issue_id)->first();
                 $issue->status = 'needForceAssign';
+                $issue->shipper_id = $resolve->bid->user_id;
                 $issue->update();
             }
         }
 
+        $bid = $resolve->bid;
+        $bid->status = 'Passed';
+        $bid->update();
         $resolve->delete();
 
         return redirect()->route('issues.biddableIssues')->withMessage('Nice try...! Want to try another one?');
@@ -240,24 +248,31 @@ class ResolveController extends Controller
         $resolve->received_date = $resolve->received_date->format('Y-m-d');
         $resolve->update();
 
+        $issue = Issue::where('id', $resolve->issue_id)->first();
+        $issue->status = 'running';
+        $issue->update();
+
         return redirect()->route('resolving_now', ['user_id' => auth()->user()->id]);
     }
 
     public function makeResolve($nextWinner, $request)
     {
+        dd($nextWinner);
+        $shipper = Resolve::where('id', $request->resolve_id)->first()->user_id;
         $newResolve = Resolve::create([
                         'user_id' => $nextWinner->bid->user_id ?? null,
                         'bid_id'  => $nextWinner->bid_id ?? null,
                         'issue_id' => $nextWinner->issue_id ?? null,
                         'winner_id' => $nextWinner->id ?? null,
-                        'previous_resolve_note' => $request->previous_resolve_note ?? null
+                        'previous_resolve_note' => $request->previous_resolve_note ?? null,
+                        'shipper_id' => $shipper
                     ]);
-        $timeToFixToDay = ceil($nextWinner->bid->timeToFix / 24);
-
-        $newSubmissionDate = Carbon::parse($newResolve->created_at)->addDay($timeToFixToDay)->format('Y-m-d');
-
-        $newResolve->submission_date = $newSubmissionDate;
+        
         $newResolve->update();
+
+        $issue = Issue::where('id', $newResolve->issue_id)->first();
+        $issue->status = 'assigned';
+        $issue->update();
     }
 
     public function forceAssign($issue_id)

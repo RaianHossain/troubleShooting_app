@@ -17,6 +17,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ route('roles.index') }}">Role</a>
                                     <a class="nav-link" href="{{ route('centers.index') }}">Centers</a>
+                                    <a class="nav-link" href="{{ route('engineers.index') }}">Enginners</a>
                                     <a class="nav-link" href="{{ route('users.index') }}">User</a>
                                     <a class="nav-link" href="{{ route('issues.index') }}">Issues</a>
                                     <a class="nav-link" href="{{ route('bids.index') }}">Bids</a>

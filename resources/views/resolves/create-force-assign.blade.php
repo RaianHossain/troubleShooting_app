@@ -59,6 +59,15 @@
                 <small id="submission_dateHelp" class="form-text text-muted">Submission Date.</small>
             </div> 
 
+            <div class="input-group mb-3">
+                <select class="form-select" id="shipper_id" name="shipper_id">
+                    <option value="{{ $issue->shipper->id }}">{{ $issue->shipper->name }}</option>
+                </select>
+                <div class="input-group-append">
+                    <label class="input-group-text" for="shipper_id">Who Will Ship</label>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -85,6 +94,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Score</th>
                             <th scope="col">Center</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Assigned</th>                            
                             <th scope="col">Up For More</th>
                         </tr>
@@ -97,6 +107,7 @@
                                 <td>{{ $bid->user->name }}</td>
                                 <td>{{ $bid->score }}</td>
                                 <td>{{ $bid->user->center->name }}</td>
+                                <td>{{ $bid->status }}</td>
                                 <td>{{ $bid->assigned }}</td>
                                 <td>{{ $bid->up_for_more == 1 ? 'Yes' : 'No' }}</td>
                                 

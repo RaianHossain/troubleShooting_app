@@ -50,7 +50,14 @@
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>                                
+                                @php
+                                    $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();
+                                @endphp
+                                @if(isset($bidded))
+                                <a href="#" class="btn btn-sm btn-success">Bidded</a>  
+                                @else
+                                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>  
+                                @endif                              
                             </td>
                         </tr>
                     @endforeach

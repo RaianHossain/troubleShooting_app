@@ -115,6 +115,7 @@
                 </div>
             </div>
             <div class="col-md-7 bg-white p-3" style="overflow: hidden;">
+                <h5><u>Code:</u> {{ $resolvingNow->issue->code }}</h5>
                 <h5><u>Alarm:</u> {{ $resolvingNow->issue->alarm }}</h5>
                 <h5><u>Description:</u> {{ $resolvingNow->issue->description }}</h5>
                 <h5><u>Occuring Time:</u> {{ $resolvingNow->issue->occuring_time }}</h5>

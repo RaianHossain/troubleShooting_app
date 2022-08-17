@@ -33,6 +33,7 @@
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
+                        <th>Code</th>
                         <th>Alarm</th>                        
                         <th>Description</th>
                         <th>To</th>
@@ -45,7 +46,8 @@
                     @foreach($issues as $issue)
                         <tr>
                             <td>{{ ++$sl }}</td>
-                            <td>{{ $issue->uploaded_by->name ?? '' }}</td>
+                            <td>{{ $issue->user->name ?? '' }}</td>
+                            <td>{{ $issue->code ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>{{ $issue->to->name ?? '' }}</td>

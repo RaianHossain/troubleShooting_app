@@ -5,7 +5,7 @@
 
     <x-slot name='breadCrumb'>
         <x-backend.layouts.elements.breadcrumb>
-            <x-slot name="pageHeader"> Bids </x-slot>
+            <x-slot name="pageHeader"> Bids of {{ $bids[0]->issue->code }} </x-slot>
 
             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
             <li class="breadcrumb-item active">Bids</li>
