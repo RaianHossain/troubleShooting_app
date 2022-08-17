@@ -81,6 +81,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Report
                             </a>
+                            <a class="nav-link" href="{{ route('sendEmail') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Send Email
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
