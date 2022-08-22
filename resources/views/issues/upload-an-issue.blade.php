@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label for="occuring_time">Occuring Time</label>
-                <input type="text" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
+                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
@@ -72,10 +72,15 @@
                 <small id="imageThreehelp" class="form-text text-muted">Upload a picture</small>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
         </form>
         
         </div>
     </div>
+<script>
+    $('#submitButton').on('click', ()=>{
+           fetch(`http://127.0.0.1:8000/sendEmail`).then(response=>console.log(response))
+    });
+</script>
 
 </x-backend.layouts.master>

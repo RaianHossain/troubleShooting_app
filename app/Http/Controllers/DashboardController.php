@@ -14,13 +14,14 @@ class DashboardController extends Controller
     
     public function sendEmail()
     {
+       // return reponse()->json('check');
         $data = array(
-            'name' => "raiansanil@gmail.com",
-            'message' => "test message"
+            'issuerName' => "raiansanil@gmail.com",
+            'url' => "test message"
         );
 
-        Mail::to('raiansanil@gmail.com')->send(new sendingEmail($data));
-        return back()->with('success', 'Thanks for contacting us!');
-        dd("sent");
+        Mail::to('jannat.bubtcse@gmail.com')->send(new sendingEmail($data));
+       // return back()->with('success', 'Thanks for contacting us!');
+        //dd("sent");
     }
 }

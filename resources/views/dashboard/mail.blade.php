@@ -1,6 +1,4 @@
-<h2> 
-    this tme no dashboard design. I am h2.
-</h2>
-<br>
-<h1>and i am h1</h1>
-<h1>{{$emails['message']}}</h1>
+<h3>New issue has been created by </h3> 
+<h1><strong>{{ $emails['issuerName'] }}</strong></h1>
+See details: {{ $emails['url'] }}
+

@@ -8,6 +8,8 @@ use App\Models\Issue;
 use App\Models\IssueResolve;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\sendingEmail;
 
 class IssueController extends Controller
 {
@@ -191,6 +193,19 @@ class IssueController extends Controller
         $code = $this->generateIssueCode($issue, null);
         $issue->code = $code;        
         $issue->update();
+        
+        //send users email about new issue
+        // $users = User::get()->all();
+        // $data = array(
+        //     'issuerName' => auth()->user()->name,
+        //     'url' => url('').'/issues/show/'.$issue->id,
+        //     'img_url' => env('APP_URL')."/Images/jannat/jannati.jpg"
+        // );
+        // foreach($users as $user)
+        // {
+        //     Mail::to($user->email)->send(new sendingEmail($data));
+        // }
+      
 
         return redirect()->route('issues.biddableIssues')->withMessage('Successfully uploaded');
 

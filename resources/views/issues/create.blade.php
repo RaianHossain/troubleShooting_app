@@ -62,7 +62,7 @@
             </div>
             <div class="form-group">
                 <label for="occuring_time">Occuring Time</label>
-                <input type="text" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
+                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
