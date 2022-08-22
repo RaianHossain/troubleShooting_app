@@ -8,10 +8,12 @@
         <meta name="author" content="" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <title>{{ $pageTitle ?? '' }}</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
         <link href="{{ asset('ui/css/styles.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('ui/css/resolving.css') }}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        
+        
     </head>
     <body class="sb-nav-fixed">
         <x-backend.layouts.partials.top_bar></x-backend.layouts.partials.top_bar>
@@ -34,6 +36,16 @@
         <script src="{{ asset('ui/assets/demo/chart-bar-demo.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
+        <script>
+          const makeSeen = (notiId, userId) => {
+              const base_url = 'http://127.0.0.1:8000';
+              const check = base_url+`/api/make-notification-seen/${notiId}/${userId}`;
+              fetch(base_url+`/api/make-notification-seen/${notiId}/${userId}`)
+          }
+        </script>
+
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     </body>
 </html>
 

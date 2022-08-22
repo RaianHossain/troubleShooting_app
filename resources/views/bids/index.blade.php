@@ -5,7 +5,7 @@
 
     <x-slot name='breadCrumb'>
         <x-backend.layouts.elements.breadcrumb>
-            <x-slot name="pageHeader"> Bids </x-slot>
+            <x-slot name="pageHeader"> Bids of {{ $bids[0]->issue->code }} </x-slot>
 
             <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
             <li class="breadcrumb-item active">Bids</li>
@@ -19,18 +19,23 @@
     @if(isset($winners) && count($winners) > 0)
     <div class="w-50">
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header bg-danger text-white">
                 <i class="fas fa-table me-1"></i>
                 Winner
             </div>
             <div class="card-body text-center">
-                <table class="table table-dark">
+                <table class="table table-dark table-bordered">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Score</th>
                             <th scope="col">Center</th>
+                            <th scope="col">Assigned</th>                            
+                            <th scope="col">Up For More</th>                            
+                            <th scope="col">Action</th>
+
+
                         </tr>
                     </thead>
                     <tbody>
@@ -41,6 +46,11 @@
                                 <td>{{ $winner->user->name }}</td>
                                 <td>{{ $winner->score }}</td>
                                 <td>{{ $winner->user->center->name }}</td>
+                                <td>{{ $winner->assigned }}</td>
+                                <td>{{ $winner->up_for_more == 1 ? 'Yes' : 'No' }}</td>
+                                <td>
+                                    <a href="{{ route('winners.assign', ['issue_id' => $winners[0]->issue_id, 'bid_id' => $winner->id]) }}" class="btn btn-primary">Assign</a>
+                                </td>
                             </tr>
                         @endforeach 
                     </tbody>
@@ -58,20 +68,20 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header  bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Bids
         </div>
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="bidsTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
-                        <th>User</th>
+                        <th>Bidder</th>
                         <th>Center</th>
-                        <th>Alarm</th>
+                        <th>Issue Code</th>
                         <th>Score</th>
                         <th>Action</th>
                     </tr>
@@ -83,7 +93,7 @@
                             <td>{{ ++$sl }}</td>
                             <td>{{ $bid->user->name ?? '' }}</td>
                             <td>{{ $bid->user->center->name }}</td>
-                            <td>{{ $bid->issue->alarm }}</td>
+                            <td>{{ $bid->issue->code }}</td>
                             <td>{{ $bid->score }}</td>
                             <td>
                                 <form style="display:inline" action="{{ route('bids.delete', ['bid_id' => $bid->id]) }}" method="post">
@@ -99,5 +109,11 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#bidsTable').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>

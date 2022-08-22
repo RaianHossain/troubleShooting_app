@@ -26,6 +26,7 @@ class CreateBidsTable extends Migration
             $table->integer('possibleCost')->nullable();
             $table->string('haveExistingTask')->nullable();
             $table->timestamps();
+            $table->string('status')->nullable();
         });
     }
 

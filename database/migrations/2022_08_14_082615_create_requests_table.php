@@ -15,7 +15,7 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->string('reason')->nullable();
+            $table->string('reason', 2000)->nullable();
             $table->unsignedBigInteger('resolve_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('issue_id')->nullable();

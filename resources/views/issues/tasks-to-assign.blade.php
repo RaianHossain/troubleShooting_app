@@ -7,7 +7,7 @@
         <x-backend.layouts.elements.breadcrumb>
             <x-slot name="pageHeader"> Tasks To Assign </x-slot>
 
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active">Tasks To Assign</li>
 
         </x-backend.layouts.elements.breadcrumb>
@@ -23,7 +23,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Tasks To Assign
 
@@ -31,12 +31,13 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="assignTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
-                        <th>Alarm</th>                        
+                        <th>Alarm</th>  
+                        <th>Code</th>                      
                         <th>Description</th>
                         <th>Action</th>
                     </tr>
@@ -48,7 +49,8 @@
                             <td>{{ ++$sl }}</td>
                             <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
-                            <td>{{ $issue->description ?? '' }}</td>
+                            <td>{{ $issue->code ?? '' }}</td>
+                            <td style="width: 400px;">{{ $issue->description ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
                                 <a href="{{ route('bids.showBids', ['issue_id' => $issue->id]) }}" class="btn btn-warning">Show Bids</a>
@@ -65,5 +67,10 @@
             </table>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#assignTable').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>

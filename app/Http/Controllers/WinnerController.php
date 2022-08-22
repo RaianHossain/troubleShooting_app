@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\Issue;
+use App\Models\Notification;
 use App\Models\Resolve;
 use App\Models\Winner;
 use Carbon\Carbon;
@@ -50,40 +51,79 @@ class WinnerController extends Controller
         return redirect()->route('winners.index')->withMessage('Successfully deleted');
     }
 
-    public function assign($issue_id)
+    public function assign($issue_id, $bid_id=null)
     {
         $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')->take(3)->get();
-        $sl = 1;
-        foreach($winners as $winner)
+        if($bid_id == null)
         {
-            $newWinner = Winner::create([
-                'endingAt' => $winner->sendBackDate,
-                'issue_id' => $winner->issue_id,
-                'bid_id' => $winner->id,
-                'position' => $sl,
-                'extensionCount' => 0,
-            ]);   
-            if($sl == 1)
+            $sl = 1;
+            foreach($winners as $winner)
             {
-                $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
-                Resolve::create([
-                    'user_id'   =>  $winner->user_id,
-                    'bid_id'   =>  $winner->id,
-                    'issue_id'   =>  $winner->issue_id,
-                    'winner_id'   =>  $newWinner->id,
-                    'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
-                    'extension_count'  => 0,                    
-                ]);
+                $newWinner = Winner::create([
+                    'endingAt' => $winner->sendBackDate,
+                    'issue_id' => $winner->issue_id,
+                    'bid_id' => $winner->id,
+                    'position' => $sl,
+                    'extensionCount' => 0,
+                ]);   
+                if($sl == 1)
+                {
+                    $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
+                    Resolve::create([
+                        'user_id'   =>  $winner->user_id,
+                        'bid_id'   =>  $winner->id,
+                        'issue_id'   =>  $winner->issue_id,
+                        'winner_id'   =>  $newWinner->id,
+                        // 'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
+                        'extension_count'  => 0,   
+                        'shipper_id' => $winner->issue->user_id,                 
+                    ]);
+                }
+                $sl++;
             }
-            $sl++;
+        }else{
+            $sl = 2;
+            foreach($winners as $winner)
+            {
+                if($winner->id == $bid_id){
+                    $newWinner = Winner::create([
+                        'endingAt' => $winner->sendBackDate,
+                        'issue_id' => $winner->issue_id,
+                        'bid_id' => $winner->id,
+                        'position' => 1,
+                        'extensionCount' => 0,
+                    ]);
+
+                    $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
+                    Resolve::create([
+                        'user_id'   =>  $winner->user_id,
+                        'bid_id'   =>  $winner->id,
+                        'issue_id'   =>  $winner->issue_id,
+                        'winner_id'   =>  $newWinner->id,
+                        // 'submission_date'   =>  $winner->sendBackDate->format('Y-m-d'),
+                        'extension_count'  => 0, 
+                        'shipper_id' => $winner->issue->user_id,                   
+                    ]);
+                }else{
+                    $newWinner = Winner::create([
+                        'endingAt' => $winner->sendBackDate,
+                        'issue_id' => $winner->issue_id,
+                        'bid_id' => $winner->id,
+                        'position' => $sl,
+                        'extensionCount' => 0,
+                    ]);
+                    $sl++;
+                }
+            }
         }
         
 
         $issue = Issue::where('id', $issue_id)->firstOrfail();
-        $issue->status = 'running';
+        $issue->status = 'assigned';
         $issue->update();
+        
 
-        return redirect()->route('issues.runningIndex')->withMessage('Successfully Assigned');
+        return redirect()->route('issues.assignedIndex')->withMessage('Successfully Assigned');
 
     }
 }

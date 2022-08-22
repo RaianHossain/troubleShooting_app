@@ -7,14 +7,14 @@
         <x-backend.layouts.elements.breadcrumb>
             <x-slot name="pageHeader"> Issues Create </x-slot>
 
-            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active">Issues Create</li>
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
 
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Issues Create
 
@@ -37,23 +37,23 @@
                 <small id="alarmHelp" class="form-text text-muted">What was the alarm.</small>
             </div>
             <div class="form-group">
-                <label for="occuring_time">Occuring Time</label>
+                <label for="occuring_time">Occuring Date</label>
                 <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
-                <label for="problem_history">Problem History</label>
-                <input type="text" class="form-control" id="problem_history" aria-describedby="problem_history_help" name="problem_history">
+                <label for="problem_history">Problem History</label>                
+                <textarea class="form-control" id="problem_history" rows="3" aria-describedby="problem_history_help" name="problem_history"></textarea>
                 <small id="problem_history_help" class="form-text text-muted">What was the problem history</small>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" class="form-control" id="description" aria-describedby="description_help" name="description">
+                <textarea class="form-control" id="description" rows="3" aria-describedby="description_help" name="description"></textarea>
                 <small id="description_help" class="form-text text-muted">What description</small>
             </div>
             <div class="form-group">
                 <label for="steps_taken">Steps Taken</label>
-                <input type="text" class="form-control" id="steps_taken" aria-describedby="steps_taken_help" name="steps_taken">
+                <textarea class="form-control" id="steps_taken" rows="3" aria-describedby="steps_taken_help" name="steps_taken"></textarea>
                 <small id="steps_taken_help" class="form-text text-muted">What was the steps taken</small>
             </div>
             <div class="form-group">
@@ -67,7 +67,7 @@
                 <small id="imageTwohelp" class="form-text text-muted">Upload a picture</small>
             </div>
             <div class="form-group">
-                <label for="imageThree" class="form-label">Picture</label>
+                <label for="imageThree" class="form-label">Picture Three</label>
                 <input class="form-control" type="file" id="imageThree" name="imageThree" aria-describedby="imageThreehelp">
                 <small id="imageThreehelp" class="form-text text-muted">Upload a picture</small>
             </div>

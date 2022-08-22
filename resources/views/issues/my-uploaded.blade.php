@@ -23,7 +23,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Issues
 
@@ -31,13 +31,13 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="uploadedTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
-                        <th>Uploaded By</th>
                         <th>Alarm</th>                        
-                        <th>Description</th>
+                        <th>Issue Code</th>                        
+                        <th>Occuring Time</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -46,17 +46,18 @@
                     @foreach($issues as $issue)
                         <tr>
                             <td>{{ ++$sl }}</td>
-                            <td>{{ $issue->uploaded_by->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
-                            <td>{{ $issue->description ?? '' }}</td>
+                            <td>{{ $issue->code ?? '' }}</td>
+                            @php $date = \Carbon\Carbon::parse($issue->occuring_time) @endphp 
+                            <td>{{ isset($date) == 1 ? $date->format('d-M-Y') : '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
+                                {{--<form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
                                     @csrf
                                     @method('delete')
 
                                     <button onclick="return confirm('Are you sure want to delete ?')" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                </form>
+                                </form>--}}
                             </td>
                         </tr>
                     @endforeach
@@ -64,5 +65,12 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#uploadedTable').DataTable();
+        });
+    </script>
+
 
 </x-backend.layouts.master>

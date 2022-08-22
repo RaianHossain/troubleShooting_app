@@ -52,5 +52,18 @@ class UserController extends Controller
         $user = User::where('id', $user_id)->first()->delete();
         return redirect()->route('users.index')->withMessage('Successfully deleted');
     }
+
+    public function upForMoreStatus($user_id, $status)
+    {
+
+        $user = User::where('id', $user_id)->first();
+        if($status == 'yes')
+        {
+            $user->up_for_more = 1;
+        }else{
+            $user->up_for_more = 0;
+        }
+        $user->update();
+    }
 }
 

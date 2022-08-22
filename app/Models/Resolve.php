@@ -29,4 +29,9 @@ class Resolve extends Model
     {
         return $this->belongsTo(Issue::class);
     }
+
+    public function shipper()
+    {
+        return $this->belongsTo(User::class, 'shipper_id');
+    }
 }

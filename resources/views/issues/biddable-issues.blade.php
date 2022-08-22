@@ -17,10 +17,33 @@
         <div class="alert alert-success">
             {{ session()->get('message') }}
         </div>
+
+        @if($issues[0] && session()->get('message') == 'Successfully uploaded')
+        <script>
+            const issueUploader = "<?php echo $issues[0]->user->name; ?>";
+            const issueUploadedFrom = "<?php echo $issues[0]->user->center->name; ?>";
+            const issueId = "<?php echo $issues[0]->id; ?>";
+            const base_url = "<?php echo $base_url; ?>";
+            const data = {
+                'subscriber': 'all',
+                'message' : `A new issue has been uploaded by ${issueUploader} from ${issueUploadedFrom}`,
+                'url' : `${base_url}/show/${issueId}`
+            }
+
+            fetch(base_url+'/api/make-notification', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+        </script>
+       
+        @endif
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Issues You Can Bid
 
@@ -28,8 +51,8 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="issuesForBid">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
@@ -47,10 +70,17 @@
                             <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
-                            <td>{{ $issue->description ?? '' }}</td>
+                            <td style="width: 370px;">{{ $issue->description ?? '' }}</td>
                             <td>
-                                <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>                                
+                                <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-warning">Show</a>
+                                @php
+                                    $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();
+                                @endphp
+                                @if(isset($bidded))
+                                <a href="#" class="btn btn-sm btn-success">Bidded</a>  
+                                @else
+                                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-warning">Bid</a>  
+                                @endif                              
                             </td>
                         </tr>
                     @endforeach
@@ -58,5 +88,11 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#issuesForBid').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>
