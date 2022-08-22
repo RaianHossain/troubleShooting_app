@@ -9,6 +9,8 @@ use App\Models\Resolve;
 use App\Models\Winner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\sendingEmail;
 
 class WinnerController extends Controller
 {
@@ -95,7 +97,8 @@ class WinnerController extends Controller
                     ]);
 
                     $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
-                    Resolve::create([
+
+                    $resolve = Resolve::create([
                         'user_id'   =>  $winner->user_id,
                         'bid_id'   =>  $winner->id,
                         'issue_id'   =>  $winner->issue_id,
@@ -122,7 +125,13 @@ class WinnerController extends Controller
         $issue->status = 'assigned';
         $issue->update();
         
+        $data = array(
+            'subject' => "Issue Assigned",
+            'url' => "",
+            'message' => "You have been assigned to issue  {$issue->code}!"
+        );
 
+        Mail::to($resolve->user->email)->send(new sendingEmail($data));
         return redirect()->route('issues.assignedIndex')->withMessage('Successfully Assigned');
 
     }

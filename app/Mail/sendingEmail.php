@@ -31,7 +31,7 @@ class sendingEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('New Issue...')
+        return $this->subject($this->emails['subject'])
         ->view('dashboard.mail')
         ->with('emails', $this->emails)
         ;

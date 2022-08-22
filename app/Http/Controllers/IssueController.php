@@ -167,7 +167,8 @@ class IssueController extends Controller
     {
         $issues = Issue::where('status', 'pending')->latest()->get();
         // dd($issues);
-        return view('issues.biddable-issues', compact('issues'));
+        $base_url = env('APP_URL');
+        return view('issues.biddable-issues', compact('issues', 'base_url'));
     }
 
     public function upload(Request $request)
@@ -219,9 +220,6 @@ class IssueController extends Controller
         //     Mail::to($user->email)->send(new sendingEmail($data));
         // }
       
-
-        
-
 
         // $notification = Notification::create([
         //     'message' => 'A new issue has been created by '.auth()->user()->name.' from '.auth()->user()->center->name,

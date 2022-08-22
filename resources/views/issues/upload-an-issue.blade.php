@@ -33,27 +33,27 @@
             @csrf            
             <div class="form-group">
                 <label for="alarm">Alarm</label>
-                <input type="text" class="form-control" id="alarm" aria-describedby="alarmHelp" name="alarm">
+                <input type="text" class="form-control" id="alarm" aria-describedby="alarmHelp" name="alarm" required>
                 <small id="alarmHelp" class="form-text text-muted">What was the alarm.</small>
             </div>
             <div class="form-group">
                 <label for="occuring_time">Occuring Date</label>
-                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
+                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time" required>
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
                 <label for="problem_history">Problem History</label>                
-                <textarea class="form-control" id="problem_history" rows="3" aria-describedby="problem_history_help" name="problem_history"></textarea>
+                <textarea class="form-control" id="problem_history" rows="3" aria-describedby="problem_history_help" name="problem_history" required></textarea>
                 <small id="problem_history_help" class="form-text text-muted">What was the problem history</small>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3" aria-describedby="description_help" name="description"></textarea>
+                <textarea class="form-control" id="description" rows="3" aria-describedby="description_help" name="description" required></textarea>
                 <small id="description_help" class="form-text text-muted">What description</small>
             </div>
             <div class="form-group">
                 <label for="steps_taken">Steps Taken</label>
-                <textarea class="form-control" id="steps_taken" rows="3" aria-describedby="steps_taken_help" name="steps_taken"></textarea>
+                <textarea class="form-control" id="steps_taken" rows="3" aria-describedby="steps_taken_help" name="steps_taken" required></textarea>
                 <small id="steps_taken_help" class="form-text text-muted">What was the steps taken</small>
             </div>
             <div class="form-group">

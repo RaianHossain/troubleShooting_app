@@ -38,6 +38,12 @@
                 }
             })
         </script>
+
+        <script>
+            $('#submitButton').on('click', ()=>{
+                fetch(`http://127.0.0.1:8000/sendEmail`).then(response=>console.log(response))
+            });
+        </script>
        
         @endif
     @endif
@@ -94,5 +100,8 @@
             $('#issuesForBid').DataTable();
         });
     </script>
+
+   
+
 
 </x-backend.layouts.master>

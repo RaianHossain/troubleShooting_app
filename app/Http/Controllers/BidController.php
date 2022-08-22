@@ -9,6 +9,8 @@ use App\Models\Resolve;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\sendingEmail;
 
 class BidController extends Controller
 {
@@ -142,6 +144,37 @@ class BidController extends Controller
             'subscriber' => serialize($subscribers),
             'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id
         ]);
+
+        $count = Bid::where('issue_id', $request->issue_id)->count();
+        //send email to super admin on first bid
+        if($count==5) 
+        {
+            $data = array(
+                'subject' => "Bid updates",
+                'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id,
+                'message' => "Already 5 bids for the issue {$bid->issue->code}! Check now!"
+            );
+    
+            Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+        }
+        
+       
+
+            $dCount = Bid::where('issue_id', $request->issue_id)
+                        ->where('created_at','>=',$bid->issue->created_at->addDays(7))
+                        ->count();
+            if($dCount==1)
+            {
+                $data = array(
+                    'subject' => "Bid updates",
+                    'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id,
+                    'message' => "Its Already 7 days for the issue {$bid->issue->code}! Check the new bid!"
+                );
+        
+                Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+            }
+           
+    
         
         return redirect()->route('issues.myBidded', ['user_id' => auth()->user()->id])->withMessage("Successfully Bidded");
     }
