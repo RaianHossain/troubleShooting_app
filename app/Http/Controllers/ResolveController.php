@@ -65,18 +65,23 @@ class ResolveController extends Controller
     public function resolvingNow($user_id)
     {
         // dd("Ok");
-        $resolvingNow = Resolve::where('user_id', $user_id)->first();
-        
-        if(!isset($resolvingNow))
+        $resolvingsNow = Resolve::where('user_id', $user_id)->get();
+        $allRequest = [];
+        foreach($resolvingsNow  as $resolvingNow )
         {
-             return view('resolves.not-resolving-anything');
-        }    
-        if($resolvingNow->received_date){
-            $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date); 
-            $resolvingNow->received_date = Carbon::parse($resolvingNow->received_date);
-        }    
-        $requests = ExtendRequest::where('resolve_id', $resolvingNow->id)->get();
-        return view('resolves.resolving-now', compact('resolvingNow', 'requests'));
+            if(!isset($resolvingNow))
+            {
+                 return view('resolves.not-resolving-anything');
+            }    
+            if($resolvingNow->received_date){
+                $resolvingNow->submission_date = Carbon::parse($resolvingNow->submission_date); 
+                $resolvingNow->received_date = Carbon::parse($resolvingNow->received_date);
+            }   
+            $requests = ExtendRequest::where('resolve_id', $resolvingNow->id)->get();
+            array_push($allRequest, $requests);
+        }
+       
+        return view('resolves.resolving-now', compact('resolvingsNow', 'allRequest'));
     }
 
     public function extendRequest(Request $request)
@@ -200,7 +205,8 @@ class ResolveController extends Controller
                         if($doesUserWantToTakeMore == 1)
                         {
                             $newResolve = $this->makeResolve($nextWinner, $request);  
-                            $this->makeResolveNotification($newResolve, $resolve);                          
+                            $this->makeResolveNotification($newResolve, $resolve); 
+                            $this->sendResolveEmail($newResolve);
                         }else{
                             $nextWinner = $winners->where('position', ($winner->position + 2))->first();
                             if($nextWinner)
@@ -214,15 +220,21 @@ class ResolveController extends Controller
                                     {
                                         $newResolve = $this->makeResolve($nextWinner, $request);
                                         $this->makeResolveNotification($newResolve, $resolve);
+                                        $this->sendResolveEmail($newResolve);
                                     }else{
                                         //haven't fixed yet
                                         $issue = Issue::where('id', $nextWinner->issue_id)->first();
                                         $issue->status = 'needForceAssign';
                                         $issue->update();
+
+                                        $this->makeForceAssignNotification($resolve);
+                                        $this->sendForceAssignEmail($resolve);
+
                                     }
                                 }else{
                                     $newResolve = $this->makeResolve($nextWinner, $request);
                                     $this->makeResolveNotification($newResolve, $resolve);
+                                    $this->sendResolveEmail($newResolve);
                                 }
                             }else{
                                 //notification
@@ -231,11 +243,15 @@ class ResolveController extends Controller
                                 $issue->status = 'needForceAssign';
                                 $issue->shipper_id = $resolve->user_id;
                                 $issue->update();
+
+                                $this->makeForceAssignNotification($resolve);
+                                $this->sendForceAssignEmail($resolve);
                             }
                         }
                     }else{
                         $newResolve= $this->makeResolve($nextWinner, $request);
                         $this->makeResolveNotification($newResolve, $resolve);
+                        $this->sendResolveEmail($newResolve);
                     }
                     
                     //notification
@@ -249,6 +265,7 @@ class ResolveController extends Controller
                     $issue->update();
 
                     $this->makeForceAssignNotification($resolve);
+                    $this->sendForceAssignEmail($resolve);
                 }
             }else{
                 //notification
@@ -259,6 +276,7 @@ class ResolveController extends Controller
                 $issue->update();
 
                 $this->makeForceAssignNotification($resolve);
+                $this->sendForceAssignEmail($resolve);
             }
         }
 
@@ -403,5 +421,28 @@ class ResolveController extends Controller
             $bid->up_for_more = User::where('id', $bid->user->id)->first()->up_for_more;
         }
         return view('resolves.create-force-assign', compact('issue', 'users', 'bids'));
+    }
+
+    public function sendResolveEmail($newResolve)
+    {
+        $data = array(
+            'subject' =>"Issue assigned",
+            'url' => "",
+            'message' => "The issue of issue code {$newResolve->issue->code} has been assigned to {$newResolve->user->name}"
+        );
+
+        Mail::to($newResolve->user->name)->send(new sendingEmail($data));
+        Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+    }
+
+    public function sendForceAssignEmail($resolve)
+    {
+        $data = array(
+            'subject' =>"Force assign",
+            'url' => "",
+            'message' => "{$resolve->user->name} gave up on the issue of code {$resolve->issue->code} and no one found to assign this task. You need to force assign."
+        );
+
+        Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
     }
 }

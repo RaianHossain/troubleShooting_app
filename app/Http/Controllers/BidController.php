@@ -146,6 +146,8 @@ class BidController extends Controller
         ]);
 
         $count = Bid::where('issue_id', $request->issue_id)->count();
+        $date=Carbon::parse($bid->issue->created_at);
+        $days = $date->diffInDays($bid->created_at);
         //send email to super admin on first bid
         if($count==5) 
         {
@@ -157,21 +159,18 @@ class BidController extends Controller
     
             Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
         }
-        
-       
-
-            $dCount = Bid::where('issue_id', $request->issue_id)
-                        ->where('created_at','>=',$bid->issue->created_at->addDays(7))
-                        ->count();
-            if($dCount==1)
+        if($days>=7 && $bid->issue->mailSent==0)
             {
                 $data = array(
                     'subject' => "Bid updates",
-                    'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id,
+                    //'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id,
+                    'url' => "",
                     'message' => "Its Already 7 days for the issue {$bid->issue->code}! Check the new bid!"
                 );
         
                 Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+                $bid->issue->mailSent = 1;
+                $bid->issue->update();
             }
            
     

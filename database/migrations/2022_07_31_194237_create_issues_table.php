@@ -30,6 +30,8 @@ class CreateIssuesTable extends Migration
             $table->string('imageTwo')->nullable();
             $table->string('imageThree')->nullable();
             $table->unsignedBigInteger('shipper_id')->nullable();
+            $table->integer('mailSent')->default(0);
+
 
         });
     }

@@ -12,7 +12,7 @@
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
-    
+    @foreach($resolvingsNow as $resolvingNow)
     <div class="mb-3">
         <div>
             <div class="d-flex justify-content-between">
@@ -87,6 +87,7 @@
 
         
     </div>
+    
 
     @if(session()->has('message'))
         <div class="alert alert-success">
@@ -94,10 +95,10 @@
         </div>
     @endif
     
-    <div class="bg-dark p-3">
+    <div class="bg-dark p-3 mb-4">
         <div class="d-flex justify-content-between bg-white p-3 mb-3">
             <h5>Start Date: {{ $resolvingNow->received_date ? $resolvingNow->received_date->format('d-M-Y') : '' }}</h5>
-            <h5 id="counting">Waiting</h5>
+            <h5 id="counting-{{ $resolvingNow->id }}">Waiting</h5>
             <h5>End Date: {{ $resolvingNow->submission_date ? $resolvingNow->submission_date->format('d-M-Y') : '' }}</h5>
             <input type="hidden" id="sub_date" value="{{ $resolvingNow->submission_date ?? null }}">
         </div>
@@ -136,7 +137,7 @@
             </div>
         </div>
     </div>   
-    
+    <hr>
     @if($resolvingNow->submission_date && $resolvingNow->received_date)
     <script>
         var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
@@ -145,6 +146,7 @@
 
 
         // Update the count down every 1 second
+        const resolvingNowId = <?php echo $resolvingNow->id ?>
         var x = setInterval(function() {
 
         // Get today's date and time
@@ -160,16 +162,17 @@
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Display the result in the element with id="demo"
-        document.getElementById("counting").innerHTML = days + "d " + hours + "h "
+        document.getElementById(`counting-${resolvingNowId}`).innerHTML = days + "d " + hours + "h "
         + minutes + "m " + seconds + "s ";
 
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("counting").innerHTML = "EXPIRED";
+            document.getElementById(`counting-${resolvingNowId}`).innerHTML = "EXPIRED";
         }
         }, 1000);              
     </script>
     @endif
+    @endforeach
     
 </x-backend.layouts.master>
