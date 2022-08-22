@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\Issue;
+use App\Models\Notification;
 use App\Models\Resolve;
 use App\Models\Winner;
 use Carbon\Carbon;
@@ -120,6 +121,7 @@ class WinnerController extends Controller
         $issue = Issue::where('id', $issue_id)->firstOrfail();
         $issue->status = 'assigned';
         $issue->update();
+        
 
         return redirect()->route('issues.assignedIndex')->withMessage('Successfully Assigned');
 

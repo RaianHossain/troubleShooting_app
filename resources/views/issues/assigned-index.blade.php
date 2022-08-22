@@ -11,16 +11,37 @@
             <li class="breadcrumb-item active">Assigned Issues</li>
 
         </x-backend.layouts.elements.breadcrumb>
-    </x-slot>    
+    </x-slot>
     
     @if(session()->has('message'))
         <div class="alert alert-success">
             {{ session()->get('message') }}
         </div>
+        @if($issues[0])
+        <script>            
+            const issueUploadedFrom = "<?php echo $issues[0]->user->center->name; ?>";
+            const issueCode = "<?php echo $issues[0]->code; ?>";
+            const assignedTo = "<?php echo $issues[0]->to->name; ?>";
+            const base_url = "<?php echo $base_url; ?>";
+            const data = {                
+                'subscriber': 'all',
+                'message' : `Issue from ${issueUploadedFrom} code: ${issueCode} has been assigned to ${assignedTo}`,
+                'url' : `${base_url}/issues/assigned`
+            }
+
+            fetch(base_url+'/api/make-notification', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+        </script>
+        @endif
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Pending Issues
 
@@ -28,14 +49,14 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="assignedIssueTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
                         <th>Code</th>
+                        <th>Uploaded From</th>
                         <th>Alarm</th>                        
-                        <th>Description</th>
                         <th>To</th>
                         <th>To Location</th>
                         <th>Action</th>
@@ -48,8 +69,8 @@
                             <td>{{ ++$sl }}</td>
                             <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
+                            <td>{{ $issue->user->center->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
-                            <td>{{ $issue->description ?? '' }}</td>
                             <td>{{ $issue->to->name ?? '' }}</td>
                             <td>{{ $issue->to->center->name ?? '' }}</td>
                             <td>
@@ -63,5 +84,10 @@
             </table>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#assignedIssueTable').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>

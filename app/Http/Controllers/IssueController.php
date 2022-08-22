@@ -6,9 +6,11 @@ use App\Models\Bid;
 use App\Models\Center;
 use App\Models\Issue;
 use App\Models\IssueResolve;
+use App\Models\Notification;
 use App\Models\Resolve;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class IssueController extends Controller
 {
@@ -52,13 +54,14 @@ class IssueController extends Controller
 
     public function assignedIndex()
     {
-        $issues = Issue::where("status", "assigned")->get();
+        $issues = Issue::where("status", "assigned")->latest()->get();
         foreach($issues as $issue)
         {
             $issue->uploaded_by = User::where('id', $issue->user_id)->first() ?? null;
             $issue->to = Resolve::where('issue_id', $issue->id)->first()->user;
         }
-        return view('issues.assigned-index', compact('issues'));
+        $base_url = env('APP_URL');
+        return view('issues.assigned-index', compact('issues', 'base_url'));
     }
 
     public function doneIndex()
@@ -168,7 +171,6 @@ class IssueController extends Controller
 
     public function upload(Request $request)
     {
-        // dd($request->all());
         $issue = Issue::create([
             'user_id' => auth()->user()->id,
             'alarm'   => $request->alarm,
@@ -203,6 +205,15 @@ class IssueController extends Controller
         $code = $this->generateIssueCode($issue, null);
         $issue->code = $code;        
         $issue->update();
+
+        
+
+
+        // $notification = Notification::create([
+        //     'message' => 'A new issue has been created by '.auth()->user()->name.' from '.auth()->user()->center->name,
+        //     'subscriber' => 'all',
+        //     'url' => url('').'/issues/show/'.$issue->id
+        // ]);
 
         return redirect()->route('issues.biddableIssues')->withMessage('Successfully uploaded');
 

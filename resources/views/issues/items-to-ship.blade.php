@@ -22,7 +22,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Items To Ship
 
@@ -30,14 +30,15 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="toShipTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
                         <th>Alarm</th>    
                         <th>Code</th>                    
-                        <th>Description</th>
+                        <th>To</th>
+                        <th>To Location</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -49,7 +50,8 @@
                             <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
-                            <td>{{ $issue->description ?? '' }}</td>
+                            <td>{{ $issue->user->name ?? '' }}</td>
+                            <td>{{ $issue->user->center->city ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
                                 @if($issue->shipped_date)
@@ -64,5 +66,11 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#toShipTable').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>

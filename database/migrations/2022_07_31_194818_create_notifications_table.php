@@ -23,6 +23,7 @@ class CreateNotificationsTable extends Migration
             $table->string('color')->nullable();
             $table->json('notification')->nullable();
             $table->timestamps();
+            $table->string('url')->nullable();
         });
     }
 

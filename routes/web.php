@@ -109,8 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/give-up', 'giveup')->name('resolves.giveup');
         Route::get('/ship/{issue_id}', 'ship')->name('resolves.shipped');
         Route::get('/receive/{resolve_id}', 'receive')->name('resolves.receive');
-        Route::get('/force-assign/{issue_id}', 'forceAssign')->name('resolves.force-assign');
-        
+        Route::get('/force-assign/{issue_id}', 'forceAssign')->name('resolves.force-assign');        
 
     });
     

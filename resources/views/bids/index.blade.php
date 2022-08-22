@@ -19,7 +19,7 @@
     @if(isset($winners) && count($winners) > 0)
     <div class="w-50">
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header bg-danger text-white">
                 <i class="fas fa-table me-1"></i>
                 Winner
             </div>
@@ -68,20 +68,20 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header  bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Bids
         </div>
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="bidsTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
-                        <th>User</th>
+                        <th>Bidder</th>
                         <th>Center</th>
-                        <th>Code</th>
+                        <th>Issue Code</th>
                         <th>Score</th>
                         <th>Action</th>
                     </tr>
@@ -109,5 +109,11 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#bidsTable').DataTable();
+        });
+    </script>
 
 </x-backend.layouts.master>

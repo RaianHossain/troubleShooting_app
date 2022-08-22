@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\Issue;
+use App\Models\Notification;
 use App\Models\Resolve;
 use App\Models\User;
 use Carbon\Carbon;
@@ -133,6 +134,14 @@ class BidController extends Controller
         //dd($score);
         $bid->score = $score;
         $bid->update();
+
+        
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $notification = Notification::create([
+            'message' => $bid->user->name.' bidded for issue ->  Code: '.$bid->issue->code.'Center: '.$bid->issue->user->center->name,
+            'subscriber' => serialize($subscribers),
+            'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id
+        ]);
         
         return redirect()->route('issues.myBidded', ['user_id' => auth()->user()->id])->withMessage("Successfully Bidded");
     }

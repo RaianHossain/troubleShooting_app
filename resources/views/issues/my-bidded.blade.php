@@ -22,7 +22,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Issues
 
@@ -30,8 +30,8 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="biddedTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>
@@ -50,16 +50,16 @@
                             <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ ucfirst($issue->alarm) ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
-                            <td>{{ ucfirst($issue->description) ?? '' }}</td>
+                            <td style="width: 350px">{{ ucfirst($issue->description) ?? '' }}</td>
                             <td>{{ ucfirst($issue->status) ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
+                                {{--<form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
                                     @csrf
                                     @method('delete')
 
                                     <button onclick="return confirm('Are you sure want to delete ?')" class="btn btn-sm btn-danger" type="submit">Delete</button>
-                                </form>
+                                </form>--}}
                             </td>
                         </tr>
                     @endforeach
@@ -67,5 +67,9 @@
             </table>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function () {
+            $('#biddedTable').DataTable();
+        });
+    </script>
 </x-backend.layouts.master>

@@ -13,7 +13,7 @@
     </x-slot>
 
     
-    <div class="row">
+    {{--<div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">Primary Card</div>
@@ -50,7 +50,34 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--}}
+    {{--list-group-item --}}
+    @if($notifications)
+        <div class="card mb-3">
+        <div class="card-header bg-danger text-white fw-bold">
+            Notification
+        </div>
+        <div class="card-body">
+            @foreach($notifications as $notification)
+                <a href="{{ $notification->url }}" style="text-decoration: none; color: black;" class="list-group-item-action" onclick="makeSeen(<?php echo $notification->id; ?>, <?php echo auth()->user()->id; ?>)">
+                    <div class="card mb-2">
+                        @php $subscriber = unserialize($notification->subscriber); @endphp
+                        <div class="card-body {{ $subscriber[auth()->user()->id] == 'unseen' ? 'bg-secondary text-white' : '' }}">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <i class="fas fa-bell me-2"></i>{{ $notification->message }}
+                                </div>
+                                <div>
+                                {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>        
+    @endif
     <div class="row">
         <div class="col-xl-6">
             <div class="card mb-4">
@@ -178,5 +205,7 @@
             </table>
         </div>
     </div>
+
+    
 
 </x-backend.layouts.master>

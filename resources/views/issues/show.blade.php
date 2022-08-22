@@ -22,27 +22,31 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-details me-1"></i><i class="fa-solid fa-book-bookmark"></i>
-            Issues
-            @php
-                $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();
-            @endphp
-            @if(isset($bidded))
-            <a href="#" class="btn btn-sm btn-success">Bidded</a>  
-            @else
-            <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Bid</a>  
-            @endif
+        <div class="card-header d-flex justify-content-between  bg-danger text-white">
+            <div>
+                <i class="fa fa-exclamation-circle me-1"></i>
+                Issues
+            </div>
+            <div>
+                @php
+                    $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();
+                @endphp
+                @if(isset($bidded))
+                <a href="#" class="btn px-5 btn-success">Bidded</a>  
+                @else
+                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-info px-5">Bid</a>  
+                @endif
+            </div>
         </div>
         <div class="card-body p-2">
             <div class="row bg-light g-0">
                 <div class="col-md-6">
-                    <div class="p-2">
-                        <img id="primary" src="{{ asset('Images/Issues/'.$issue->imageTwo) }}" alt="Image" style="width: 90%; height: 500px;">
+                    <div>
+                        <img id="primary" src="{{ asset('Images/Issues/'.$issue->imageTwo) }}" alt="Image" style="width: 95%; height: 500px;">
                     </div>
-                    <div class="d-flex p-2">
-                        <img id="secondaryOne" src="{{ asset('Images/Issues/'.$issue->imageOne) }}" alt="Image" style="width: 15%; height: 100px; margin-right: 5px;">
-                        <img id="secondaryTwo" src="{{ asset('Images/Issues/'.$issue->imageThree) }}" alt="Image" style="width: 15%; height: 100px;">
+                    <div class="d-flex mt-2">
+                        <img id="secondaryOne" src="{{ asset('Images/Issues/'.$issue->imageOne) }}" alt="Image" style="width: 25%; height: 100px; margin-right: 5px;">
+                        <img id="secondaryTwo" src="{{ asset('Images/Issues/'.$issue->imageThree) }}" alt="Image" style="width: 25%; height: 100px;">
                     </div>
                 </div>
                 <div class="col-md-6 p-2">

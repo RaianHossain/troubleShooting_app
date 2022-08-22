@@ -29,4 +29,33 @@ class NotificationController extends Controller
         // dd($notifications);
         return view('notifications.index', compact('notifications'));
     }
+
+    public function makeNotification(Request $request)
+    {
+        if($request['subscriber'] == 'all'){
+            $users = User::all();
+            $subscribers = array();
+            foreach($users as $user)
+            {
+                $subscribers[$user->id] = "unseen";
+            }
+        }
+        $notification = Notification::create([
+            'message' => $request->message,
+            'subscriber' => serialize($subscribers),
+            'url' => $request->url
+        ]);
+        return response()->json($notification);
+    }
+
+    public function makeSeen($notification_id, $user_id)
+    {
+        $notification = Notification::where('id', $notification_id)->first();
+        $subscribers = unserialize($notification->subscriber);
+        $subscribers[$user_id] = 'seen';
+        $notification->subscriber = serialize($subscribers);
+        $notification->update();
+        return 'success';
+    }
+    
 }

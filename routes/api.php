@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/up-for-more/{user_id}/{state}', [UserController::class, 'upForMoreStatus']);
+Route::post('/make-notification', [NotificationController::class, 'makeNotification']);
+Route::get('/make-notification-seen/{notification_id}/{user_id}', [NotificationController::class, 'makeSeen']);

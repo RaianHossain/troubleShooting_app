@@ -8,6 +8,7 @@ use App\Models\Resolve;
 use App\Models\User;
 use App\Models\ExtendRequest;
 use App\Models\IssueResolve;
+use App\Models\Notification;
 use App\Models\Winner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -88,6 +89,13 @@ class ResolveController extends Controller
             'issue_id' => $resolvingNow->issue_id ?? null
         ]);
 
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $notification = Notification::create([
+            'message' => $resolvingNow->user->name.' requested for time extention of issue '.$resolvingNow->issue->code,
+            'subscriber' => serialize($subscribers),
+            'url' => env('APP_URL').'/resolves/time-extend-request'
+        ]); 
+
         return redirect()->route('resolving_now', ['user_id' => auth()->user()->id])->withMessage("Successfully Submitted");
     }
 
@@ -110,6 +118,13 @@ class ResolveController extends Controller
         $request = ExtendRequest::where('id', $request_id)->firstOrFail();
         $request->approved = 1;
         $request->update();
+
+        // $subscribers[$resolve->user_id] = 'unseen';
+        // $notification = Notification::create([
+        //     'message' => 'Your request for time extention of '.$resolve->issue->code.' is accepted',
+        //     'subscriber' => serialize($subscribers),
+        //     'url' => env('APP_URL').'/resolving-now/'.$resolve->user_id
+        // ]); 
 
         return redirect()->route('resolves.timeExtendRequest')->withMessage("Successfully Approved");
     }
@@ -139,7 +154,15 @@ class ResolveController extends Controller
             'submission_date'  => $resolve->submission_date ?? null,
         ]);
 
-        //make history
+        //make notification
+        $subscribers[$resolve->user_id] = 'unseen';
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+
+        $notification = Notification::create([
+            'message' => 'Congratulations to '.$resolve->user->name.'for successfully completing the issue of code: '.$resolve->issue->code,
+            'subscriber' => serialize($subscribers),
+            'url' => env('APP_URL').'/my-solved/'.$resolve->user_id
+        ]); 
         //empty resolves table
         $resolve->delete();
         return redirect()->route('issues.mySolved', ['user_id' => auth()->user()->id])->withMessage("Congratulations! Successfully Completed!");
@@ -164,7 +187,8 @@ class ResolveController extends Controller
                         $doesUserWantToTakeMore = User::where('id', $nextWinner->bid->user_id)->first()->up_for_more;
                         if($doesUserWantToTakeMore == 1)
                         {
-                            $this->makeResolve($nextWinner, $request);                            
+                            $newResolve = $this->makeResolve($nextWinner, $request);  
+                            $this->makeResolveNotification($newResolve, $resolve);                          
                         }else{
                             $nextWinner = $winners->where('position', ($winner->position + 2))->first();
                             if($nextWinner)
@@ -176,7 +200,8 @@ class ResolveController extends Controller
                                     $doesUserWantToTakeMore = User::where('id', $nextWinner->bid->user_id)->first()->up_for_more;
                                     if($doesUserWantToTakeMore == 1)
                                     {
-                                        $this->makeResolve($nextWinner, $request);
+                                        $newResolve = $this->makeResolve($nextWinner, $request);
+                                        $this->makeResolveNotification($newResolve, $resolve);
                                     }else{
                                         //haven't fixed yet
                                         $issue = Issue::where('id', $nextWinner->issue_id)->first();
@@ -184,7 +209,8 @@ class ResolveController extends Controller
                                         $issue->update();
                                     }
                                 }else{
-                                    $this->makeResolve($nextWinner, $request);
+                                    $newResolve = $this->makeResolve($nextWinner, $request);
+                                    $this->makeResolveNotification($newResolve, $resolve);
                                 }
                             }else{
                                 //notification
@@ -196,7 +222,8 @@ class ResolveController extends Controller
                             }
                         }
                     }else{
-                        $this->makeResolve($nextWinner, $request);
+                        $newResolve= $this->makeResolve($nextWinner, $request);
+                        $this->makeResolveNotification($newResolve, $resolve);
                     }
                     
                     //notification
@@ -208,6 +235,8 @@ class ResolveController extends Controller
                     $issue->status = 'needForceAssign';
                     $issue->shipper_id = $resolve->user_id;
                     $issue->update();
+
+                    $this->makeForceAssignNotification($resolve);
                 }
             }else{
                 //notification
@@ -216,15 +245,56 @@ class ResolveController extends Controller
                 $issue->status = 'needForceAssign';
                 $issue->shipper_id = $resolve->bid->user_id;
                 $issue->update();
+
+                $this->makeForceAssignNotification($resolve);
             }
         }
 
         $bid = $resolve->bid;
         $bid->status = 'Passed';
         $bid->update();
+
+        // $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        // $subscribers[$resolve->user_id] = 'unseen';
+        // $notification = Notification::create([
+        //     'message' => 'Machine of issue code '.$resolve->issue->code.' has been shipped to '.$resolve->user->name.' - '.$resolve->user->center->city.' from '.$resolve->shipper->center->name.' at '.$resolve->shipped_date->format('d-M-Y'),
+        //     'subscriber' => serialize($subscribers),
+        //     'url' => '#'
+        // ]);
+
         $resolve->delete();
 
         return redirect()->route('issues.biddableIssues')->withMessage('Nice try...! Want to try another one?');
+    }
+
+    public function makeForceAssignNotification($resolve)
+    {
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $notification = Notification::create([
+            'message' => $resolve->user->name.' gave up the issue '.$resolve->issue->code.'. Need force assign',
+            'subscriber' => serialize($subscribers),
+            'url' => env('APP_URL').'/issues/force-assign/issues'
+        ]);
+    }
+
+    public function makeResolveNotification($newResolve, $resolve)
+    {
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $subscribers[$newResolve->user_id] = 'unseen';
+
+        $notification = Notification::create([
+            'message' => 'Issue from '.$newResolve->issue->user->center->name.' code: '.$newResolve->issue->code.' has been assigned to '.$newResolve->user->name.' '.$resolve->user->name.' gave up',
+            'subscriber' => serialize($subscribers),
+            'url' => env('APP_URL').'/issues/force-assign/issues'
+        ]);
+
+        $anotherSubscriber[$resolve->user_id] = 'unseen';
+
+        $anotherNotification = Notification::create([
+            'message' => 'Please ship the machine of issue code: '.$newResolve->issue->code.'to '.$newResolve->user->name.', center: '.$newResolve->user->center->name.' city: '.$newResolve->user->center->name, 
+            'subscriber' => serialize($anotherSubscriber),
+            'url' => env('APP_URL').'/issues/items-to-ship/'.$resolve->user_id
+        ]);
     }
 
     public function ship($issue_id)
@@ -232,6 +302,14 @@ class ResolveController extends Controller
         $resolve = Resolve::where('issue_id', $issue_id)->first();
         $resolve->shipped_date = Carbon::now();
         $resolve->update();
+
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $subscribers[$resolve->user_id] = 'unseen';
+        $notification = Notification::create([
+            'message' => 'Machine of issue code '.$resolve->issue->code.' has been shipped to '.$resolve->user->name.' - '.$resolve->user->center->city.' from '.$resolve->shipper->center->name.' at '.$resolve->shipped_date->format('d-M-Y'),
+            'subscriber' => serialize($subscribers),
+            'url' => '#'
+        ]);
 
         return redirect()->route('issues.toShip', ['user_id' => auth()->user()->id])->withMessage("Successfully updated");
     }
@@ -252,12 +330,20 @@ class ResolveController extends Controller
         $issue->status = 'running';
         $issue->update();
 
+        $subscribers[config('roleWiseId.super_admin')] = 'unseen';
+        $subscribers[$resolve->shipper_id] = 'unseen';
+        $notification = Notification::create([
+            'message' => 'Machine of issue code '.$resolve->issue->code.' received by '.$resolve->user->name.' - '.$resolve->user->center->city.' at '.$resolve->received_date->format('d-M-Y').' shipped at '.$resolve->shipped_date->format('d-M-Y'),
+            'subscriber' => serialize($subscribers),
+            'url' => '#'
+        ]); 
+
         return redirect()->route('resolving_now', ['user_id' => auth()->user()->id]);
     }
 
     public function makeResolve($nextWinner, $request)
     {
-        dd($nextWinner);
+        // dd($nextWinner);
         $shipper = Resolve::where('id', $request->resolve_id)->first()->user_id;
         $newResolve = Resolve::create([
                         'user_id' => $nextWinner->bid->user_id ?? null,
@@ -273,6 +359,8 @@ class ResolveController extends Controller
         $issue = Issue::where('id', $newResolve->issue_id)->first();
         $issue->status = 'assigned';
         $issue->update();
+
+        return $newResolve;
     }
 
     public function forceAssign($issue_id)

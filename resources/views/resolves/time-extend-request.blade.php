@@ -21,7 +21,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-danger text-white">
             <i class="fas fa-table me-1"></i>
             Time Extend Requests
 
@@ -29,8 +29,8 @@
         <div class="card-body">
 
         
-            <table class="table">
-                <thead>
+            <table class="table table-bordered" id="requestTable">
+                <thead class="bg-danger text-white">
                     <tr>
                         <th>Sl#</th>
                         <th>Reason</th>
@@ -57,6 +57,13 @@
             </table>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#requestTable').DataTable();
+        });
+    </script>
+
 
 </x-backend.layouts.master>
 
