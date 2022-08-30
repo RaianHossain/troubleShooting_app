@@ -10,7 +10,8 @@ use App\Models\Notification;
 use App\Models\Resolve;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\sendingEmail;
 
 class IssueController extends Controller
 {
@@ -166,7 +167,8 @@ class IssueController extends Controller
     {
         $issues = Issue::where('status', 'pending')->latest()->get();
         // dd($issues);
-        return view('issues.biddable-issues', compact('issues'));
+        $base_url = env('APP_URL');
+        return view('issues.biddable-issues', compact('issues', 'base_url'));
     }
 
     public function upload(Request $request)
@@ -205,9 +207,19 @@ class IssueController extends Controller
         $code = $this->generateIssueCode($issue, null);
         $issue->code = $code;        
         $issue->update();
-
         
-
+        //send users email about new issue
+        // $users = User::get()->all();
+        // $data = array(
+        //     'issuerName' => auth()->user()->name,
+        //     'url' => url('').'/issues/show/'.$issue->id,
+        //     'img_url' => env('APP_URL')."/Images/jannat/jannati.jpg"
+        // );
+        // foreach($users as $user)
+        // {
+        //     Mail::to($user->email)->send(new sendingEmail($data));
+        // }
+      
 
         // $notification = Notification::create([
         //     'message' => 'A new issue has been created by '.auth()->user()->name.' from '.auth()->user()->center->name,

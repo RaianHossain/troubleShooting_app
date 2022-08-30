@@ -34,7 +34,7 @@
         <form action="{{ route('issues.store') }}" method="post">
             @csrf
             <div class="input-group mb-3">
-                <select class="form-select" id="user_id" name="user_id">
+                <select class="form-select" id="user_id" name="user_id" required>
                     <option selected>Choose...</option>
                     @foreach($users as $user)    
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <select class="form-select" id="center_id" name="center_id">
+                <select class="form-select" id="center_id" name="center_id" required>
                     <option selected>Choose...</option>
                     @foreach($centers as $center)    
                         <option value="{{ $center->id }}">{{ $center->name }} - {{ $center->city }}</option>
@@ -57,27 +57,27 @@
             </div>
             <div class="form-group">
                 <label for="alarm">Alarm</label>
-                <input type="text" class="form-control" id="alarm" aria-describedby="alarmHelp" name="alarm">
+                <input type="text" class="form-control" id="alarm" aria-describedby="alarmHelp" name="alarm" required>
                 <small id="alarmHelp" class="form-text text-muted">What was the alarm.</small>
             </div>
             <div class="form-group">
                 <label for="occuring_time">Occuring Time</label>
-                <input type="text" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time">
+                <input type="date" class="form-control" id="occuring_time" aria-describedby="occuring_time_help" name="occuring_time" required>
                 <small id="occuring_time_help" class="form-text text-muted">What does it occured</small>
             </div>
             <div class="form-group">
                 <label for="problem_history">Problem History</label>
-                <input type="text" class="form-control" id="problem_history" aria-describedby="problem_history_help" name="problem_history">
+                <input type="text" class="form-control" id="problem_history" aria-describedby="problem_history_help" name="problem_history" required>
                 <small id="problem_history_help" class="form-text text-muted">What was the problem history</small>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" class="form-control" id="description" aria-describedby="description_help" name="description">
+                <input type="text" class="form-control" id="description" aria-describedby="description_help" name="description" required>
                 <small id="description_help" class="form-text text-muted">What description</small>
             </div>
             <div class="form-group">
                 <label for="steps_taken">Steps Taken</label>
-                <input type="text" class="form-control" id="steps_taken" aria-describedby="steps_taken_help" name="steps_taken">
+                <input type="text" class="form-control" id="steps_taken" aria-describedby="steps_taken_help" name="steps_taken" required>
                 <small id="steps_taken_help" class="form-text text-muted">What was the steps taken</small>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>

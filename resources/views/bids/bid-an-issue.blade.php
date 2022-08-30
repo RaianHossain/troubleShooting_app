@@ -68,24 +68,24 @@
 
             <div class="form-group">
                 <label for="timeToFix">Time To Fix</label>
-                <input type="number" class="form-control" id="timeToFix" aria-describedby="timeToFixHelp" name="timeToFix">
+                <input type="number" class="form-control" id="timeToFix" aria-describedby="timeToFixHelp" name="timeToFix" required>
             </div>
             <br>
 
             <div class="form-group">
                 <label for="sendBackDate">Send Back Date</label>
-                <input type="date" class="form-control" id="sendBackDate" aria-describedby="sendBackDateHelp" name="sendBackDate">
+                <input type="date" class="form-control" id="sendBackDate" aria-describedby="sendBackDateHelp" name="sendBackDate" required>
             </div>
             <br>
 
             <p>Need Support?</p>
             <div class="d-flex justify-content-between" style="width:10%">
                 <div>
-                    <input type="radio" id="yes" name="needSupport" value="1">
+                    <input type="radio" id="yes" name="needSupport" value="1" required>
                     <label for="yes">Yes</label>
                 </div>
                 <div>
-                    <input type="radio" id="no" name="needSupport" value="0">
+                    <input type="radio" id="no" name="needSupport" value="0" required>
                     <label for="no">No</label>
                 </div>
             </div>
@@ -94,11 +94,11 @@
             <p>Need Spare?</p>
             <div class="d-flex justify-content-between" style="width:10%">
                 <div>
-                    <input type="radio" id="yes" name="needSpare" value="1">
+                    <input type="radio" id="yes" name="needSpare" value="1" required>
                     <label for="yes">Yes</label>
                 </div>
                 <div>
-                    <input type="radio" id="no" name="needSpare" value="0">
+                    <input type="radio" id="no" name="needSpare" value="0" required>
                     <label for="no">No</label>
                 </div>
             </div>
@@ -107,18 +107,18 @@
 
             <div class="form-group">
                 <label for="possibleCost">Possible Cost</label>
-                <input type="number" class="form-control" id="possibleCost" aria-describedby="possibleCostHelp" name="possibleCost">
+                <input type="number" class="form-control" id="possibleCost" aria-describedby="possibleCostHelp" name="possibleCost" required>
             </div>
             <br>
 
             <p>Have Existing Task:</p>
             <div class="d-flex justify-content-between" style="width:10%">
                 <div>
-                    <input type="radio" id="yes" name="haveExistingTask" value="1">
+                    <input type="radio" id="yes" name="haveExistingTask" value="1" required>
                     <label for="yes">Yes</label>
                 </div>
                 <div>
-                    <input type="radio" id="no" name="haveExistingTask" value="0">
+                    <input type="radio" id="no" name="haveExistingTask" value="0" required>
                     <label for="no">No</label>
                 </div>
             </div>
