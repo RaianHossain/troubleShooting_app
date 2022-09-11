@@ -8,6 +8,7 @@
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading text-white">Administration</div>
+                            @if(!is_Engineer())
                             <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Masterdata
@@ -26,6 +27,7 @@
                                     <a class="nav-link text-white" href="{{ route('issueResolves.index') }}">History</a>
                                 </nav>
                             </div>
+                            @endif
                             <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Issue Management
@@ -75,6 +77,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Items to ship
                             </a>
+                            @if(!is_Engineer())
                             <a class="nav-link text-white" href="{{ route('task_to_assign') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tasks To Assign
@@ -87,6 +90,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Time Extend Request
                             </a>
+                            @endif
                             <a class="nav-link text-white" href="tables.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Report

@@ -152,6 +152,31 @@ class ResolveController extends Controller
         $issue->status = 'done';
         $issue->solve_note = $request->solveNote;
         $issue->update();
+
+        //score penalty
+        if($resolve->extension_count == 0)
+        {
+            $user = User::where('id', $resolve->id)->first();
+            $user->score = $user->score+100;
+        }
+
+        else if($resolve->extension_count == 1)
+        {
+            $user = User::where('id', $resolve->id)->first();
+            $user->score = $user->score+75;
+        }
+
+        else if($resolve->extension_count == 2)
+        {
+            $user = User::where('id', $resolve->id)->first();
+            $user->score = $user->score+50;
+        }
+
+        else if($resolve->extension_count == 3)
+        {
+            $user = User::where('id', $resolve->id)->first();
+            $user->score = $user->score+10;
+        }
         
         //make history
         $history = IssueResolve::create([

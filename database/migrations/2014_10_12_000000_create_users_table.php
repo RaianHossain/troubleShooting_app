@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('role_id')->nullable();
             $table->integer('up_for_more')->default(0);
+            $table->string('score', 20)->default(0);
         });
     }
 
