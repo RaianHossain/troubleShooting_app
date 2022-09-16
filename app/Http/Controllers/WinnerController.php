@@ -71,7 +71,7 @@ class WinnerController extends Controller
                 if($sl == 1)
                 {
                     $winner->sendBackDate = Carbon::parse($winner->sendBackDate);
-                    Resolve::create([
+                    $resolve = Resolve::create([
                         'user_id'   =>  $winner->user_id,
                         'bid_id'   =>  $winner->id,
                         'issue_id'   =>  $winner->issue_id,
@@ -130,7 +130,7 @@ class WinnerController extends Controller
             'url' => "",
             'message' => "You have been assigned to issue  {$issue->code}!"
         );
-
+       // dd($resolve);
         Mail::to($resolve->user->email)->send(new sendingEmail($data));
         return redirect()->route('issues.assignedIndex')->withMessage('Successfully Assigned');
 

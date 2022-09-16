@@ -12,7 +12,7 @@
 
         </x-backend.layouts.elements.breadcrumb>
     </x-slot>
-    @foreach($resolvingsNow as $resolvingNow)
+    @forelse($resolvingsNow as $resolvingNow)
     <div class="mb-3">
         <div>
             <div class="d-flex justify-content-between">
@@ -140,6 +140,7 @@
     <hr>
     @if($resolvingNow->submission_date && $resolvingNow->received_date)
     <script>
+        console.log("sgzd");
         var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
         // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
         var countDownDate = new Date(submission_date).getTime();
@@ -173,6 +174,10 @@
         }, 1000);              
     </script>
     @endif
-    @endforeach
+    @empty
+        <div class="w-100 d-flex justify-content-center align-items-center text-danger" style="height:400px">
+            <h2>You are not resolving any issue right now!</h2>
+        </div>
+    @endforelse
     
 </x-backend.layouts.master>
