@@ -268,6 +268,7 @@ class IssueController extends Controller
                 $issue->shipped_date = $shipped_date->shipped_date;
             }
         }
+        //dd($issues);
         return view('issues.items-to-ship', compact('issues'));
     }
 

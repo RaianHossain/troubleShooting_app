@@ -68,7 +68,7 @@
                             <button type="submit" class="btn btn-sm btn-success mt-3" style="width: 10%;">Submit</button>
                         </div>
                     </form>
-                </div>
+                </div> 
             </div>
     
             <div class="collapse" id="completeCollapse">
@@ -97,9 +97,10 @@
     
     <div class="bg-dark p-3 mb-4">
         <div class="d-flex justify-content-between bg-white p-3 mb-3">
-            <h5>Start Date: {{ $resolvingNow->received_date ? $resolvingNow->received_date->format('d-M-Y') : '' }}</h5>
+           
+            <h5>Start Date: {{ $resolvingNow->received_date ? $resolvingNow->received_date : '' }}</h5>
             <h5 id="counting-{{ $resolvingNow->id }}">Waiting</h5>
-            <h5>End Date: {{ $resolvingNow->submission_date ? $resolvingNow->submission_date->format('d-M-Y') : '' }}</h5>
+            <h5>End Date: {{ $resolvingNow->submission_date ? $resolvingNow->submission_date : '' }}</h5>
             <input type="hidden" id="sub_date" value="{{ $resolvingNow->submission_date ?? null }}">
         </div>
 
@@ -140,7 +141,6 @@
     <hr>
     @if($resolvingNow->submission_date && $resolvingNow->received_date)
     <script>
-        console.log("sgzd");
         var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
         // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
         var countDownDate = new Date(submission_date).getTime();

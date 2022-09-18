@@ -40,14 +40,14 @@ class ResolveController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $data = $request->all();
         $resolve = Resolve::create([
             'user_id' => $data['user_id'] ?? null,
             'bid_id' => $data['bid_id'] ?? null,
             'issue_id' => $data['issue_id'] ?? null,
             'winner_id' => $data['winner_id'] ?? null,
-            'start_date' => $data['start_date'] ?? null,
+            //'start_date' => $data['start_date'] ?? null,
             'submission_date' => $data['submission_date'] ?? null,
             'extension_count' => $data['extension_count'] ?? 0,
             'extended_date' => $data['extended_date'] ?? null,
@@ -156,25 +156,25 @@ class ResolveController extends Controller
         //score penalty
         if($resolve->extension_count == 0)
         {
-            $user = User::where('id', $resolve->id)->first();
+            $user = User::where('id', $resolve->user_id)->first();
             $user->score = $user->score+100;
         }
 
         else if($resolve->extension_count == 1)
         {
-            $user = User::where('id', $resolve->id)->first();
+            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+75;
         }
 
         else if($resolve->extension_count == 2)
         {
-            $user = User::where('id', $resolve->id)->first();
+            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+50;
         }
 
         else if($resolve->extension_count == 3)
         {
-            $user = User::where('id', $resolve->id)->first();
+            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+10;
         }
         
@@ -215,12 +215,15 @@ class ResolveController extends Controller
         $resolve = Resolve::where('id', $request->resolve_id)->first();
         $winner = Winner::where('id', $resolve->winner_id)->first();
         $winners = Winner::where('issue_id', $winner->issue_id)->get();
+      
 
         if(count($winners) > 1)
         {
             if($winner->position < 3)
             {
                 $nextWinner = $winners->where('position', ($winner->position + 1))->first();
+                //dd( $nextWinner);
+
                 if($nextWinner)
                 {
                     $user = User::where('id', $nextWinner->bid->user_id)->first();
@@ -264,7 +267,8 @@ class ResolveController extends Controller
                             }else{
                                 //notification
                                 //force assign
-                                $issue = Issue::where('id', $nextWinner->issue_id)->first();
+                                //dd($winners[0]);
+                                $issue = Issue::where('id', $winners[0]->issue_id)->first();
                                 $issue->status = 'needForceAssign';
                                 $issue->shipper_id = $resolve->user_id;
                                 $issue->update();
@@ -424,6 +428,8 @@ class ResolveController extends Controller
                         'winner_id' => $nextWinner->id ?? null,
                         'previous_resolve_note' => $request->previous_resolve_note ?? null,
                         'shipper_id' => $shipper
+                        
+                        
                     ]);
         
         $newResolve->update();
@@ -456,7 +462,7 @@ class ResolveController extends Controller
             'message' => "The issue of issue code {$newResolve->issue->code} has been assigned to {$newResolve->user->name}"
         );
 
-        Mail::to($newResolve->user->name)->send(new sendingEmail($data));
+        Mail::to($newResolve->user->email)->send(new sendingEmail($data));
         Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
     }
 

@@ -42,14 +42,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $sl = 0 @endphp
+                    @php $sl = 0   @endphp
                     @foreach($issues as $issue)
                         <tr>
                             <td>{{ ++$sl }}</td>
-                            <td>{{ $issue->uploaded_by->name ?? '' }}</td>
+                            <td>{{ $issue->user->name ?? '' }}</td>
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->description ?? '' }}</td>
                             <td>
+
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
                             </td>
                         </tr>

@@ -14,4 +14,9 @@ class IssueResolve extends Model
     {
         return $this->belongsTo(Winner::class);
     }
+
+    public function issue()
+    {
+        return $this->belongsTo(Issue::class);
+    }
 }

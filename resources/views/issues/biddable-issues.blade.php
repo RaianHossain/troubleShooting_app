@@ -18,7 +18,7 @@
             {{ session()->get('message') }}
         </div>
 
-        @if($issues[0] && session()->get('message') == 'Successfully uploaded')
+        @if(isset($issues[0]) && session()->get('message') == 'Successfully uploaded')
         <script>
             const issueUploader = "<?php echo $issues[0]->user->name; ?>";
             const issueUploadedFrom = "<?php echo $issues[0]->user->center->name; ?>";
