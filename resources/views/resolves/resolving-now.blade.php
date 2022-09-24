@@ -147,7 +147,7 @@
 
 
         // Update the count down every 1 second
-        const resolvingNowId = <?php echo $resolvingNow->id ?>
+        var resolvingNowId = "<?php echo $resolvingNow->id ?>";
         var x = setInterval(function() {
 
         // Get today's date and time
