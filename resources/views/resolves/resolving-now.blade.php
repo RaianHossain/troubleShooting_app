@@ -139,45 +139,62 @@
         </div>
     </div>   
     <hr>
-    @if($resolvingNow->submission_date && $resolvingNow->received_date)
-    <script>
-        var submission_date = "<?php echo $resolvingNow->submission_date->format('M d, Y H:i:s'); ?>";
-        // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
-        var countDownDate = new Date(submission_date).getTime();
-
-
-        // Update the count down every 1 second
-        var resolvingNowId = "<?php echo $resolvingNow->id ?>";
-        var x = setInterval(function() {
-
-        // Get today's date and time
-        var now = new Date().getTime();
-
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Display the result in the element with id="demo"
-        document.getElementById(`counting-${resolvingNowId}`).innerHTML = days + "d " + hours + "h "
-        + minutes + "m " + seconds + "s ";
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById(`counting-${resolvingNowId}`).innerHTML = "EXPIRED";
-        }
-        }, 1000);              
-    </script>
-    @endif
+   
     @empty
         <div class="w-100 d-flex justify-content-center align-items-center text-danger" style="height:400px">
             <h2>You are not resolving any issue right now!</h2>
         </div>
     @endforelse
     
+   <script>
+    var  jobs = {!! json_encode($resolvingsNow) !!}; 
+    for(job in jobs)
+    {
+        //console.log(jobs[job].submission_date);
+
+        if(jobs[job].submission_date && jobs[job].received_date)
+        {
+           setTimer(jobs[job].submission_date, jobs[job].id);
+        }
+
+    }
+    function setTimer(a,b)
+    {
+        var submission_date = a;
+// var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+var countDownDate = new Date(submission_date).getTime();
+
+
+// Update the count down every 1 second
+var resolvingNowId = b;
+var x = setInterval(function() {
+
+// Get today's date and time
+var now = new Date().getTime();
+
+// Find the distance between now and the count down date
+var distance = countDownDate - now;
+
+// Time calculations for days, hours, minutes and seconds
+var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+// Display the result in the element with id="demo"
+document.getElementById(`counting-${resolvingNowId}`).innerHTML = days + "d " + hours + "h "
++ minutes + "m " + seconds + "s ";
+//  console.log(`counting-${resolvingNowId}`);
+//  console.log(`${days} + "d " + ${hours} + "h "
+// + ${minutes} + "m " + ${seconds} + "s "`);
+// If the count down is finished, write some text
+if (distance < 0) {
+    clearInterval(x);
+    document.getElementById(`counting-${resolvingNowId}`).innerHTML = "EXPIRED";
+}
+}, 1000);              
+
+    }
+    
+   </script>
 </x-backend.layouts.master>
