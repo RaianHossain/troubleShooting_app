@@ -34,20 +34,19 @@
         <form action="{{ route('engineers.store') }}" method="post">
             @csrf
             
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="user">Name</label>
                 <input type="text" class="form-control" id="name" aria-describedby="nameHelp" name="name">
-                <small id="nameHelp" class="form-text text-muted">Write the user name.</small>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
-                <small id="emailHelp" class="form-text text-muted">Write the user email.</small>
             </div>            
 
+            <label for="center_id">Center</label>
             <div class="input-group mb-3">
-                <select class="form-select" aria-label="Default select example" name="center_id">
+                <select class="form-select form-control" aria-label="Default select example" name="center_id" id="center_id">
                     <option selected>Choose One...</option>
                     @foreach($centers as $center)    
                         <option value="{{ $center->id }}">{{ $center->name }}</option>

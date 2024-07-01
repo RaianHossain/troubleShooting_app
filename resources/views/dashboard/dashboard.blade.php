@@ -54,7 +54,7 @@
     {{--list-group-item --}}
     @if($notifications)
         <div class="card mb-3">
-        <div class="card-header bg-danger text-white fw-bold">
+        <div class="card-header navbar-custom text-white fw-bold">
             Notification
         </div>
         <div class="card-body">
@@ -68,7 +68,7 @@
                                     <i class="fas fa-bell me-2"></i>{{ $notification->message }}
                                 </div>
                                 <div>
-                                {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                {{ str_replace([' day', ' days', ' weeks', ' week', ' month', ' months', ' year', ' years', ' ago'], ['d', 'd', 'w', 'w', 'm', 'm', 'y', 'y', ''], \Carbon\Carbon::parse($notification->created_at)->diffForHumans()) }}
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
         </div>        
     @endif
     <div class="row">
-        <div class="col-xl-6">
+        <!-- <div class="col-xl-6">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
@@ -87,14 +87,23 @@
                 </div>
                 <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
             </div>
+        </div> -->
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Your Points This Year
+                </div>
+                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+            </div>
         </div>
         <div class="col-xl-6">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
+                    Point Distribution
                 </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                <div class="card-body"><canvas id="myPieChart" width="100%" height="40"></canvas></div>
             </div>
         </div>
     </div>
@@ -205,6 +214,15 @@
             </table>
         </div>
     </div> -->
+
+    <script>
+        function makeSeen(notification_id, user_id) {
+            const base_url = "<?php echo env('APP_URL'); ?>"
+            const fetch_url = base_url+`/api/make-notification-seen/${notification_id}/${user_id}`
+            // alert(fetch_url);
+            fetch(fetch_url);
+        }
+    </script>
 
     
 

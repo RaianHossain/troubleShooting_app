@@ -36,7 +36,7 @@ class DashboardController extends Controller
             'url' => "test message"
         );
 
-        Mail::to('jannat.bubtcse@gmail.com')->send(new sendingEmail($data));
+        Mail::to('raiansanil@gmail.com')->send(new sendingEmail($data));
        // return back()->with('success', 'Thanks for contacting us!');
         //dd("sent");
     }

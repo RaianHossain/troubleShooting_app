@@ -153,30 +153,30 @@ class ResolveController extends Controller
         $issue->solve_note = $request->solveNote;
         $issue->update();
 
+        $user = User::where('id', $resolve->user_id)->first();
+
         //score penalty
         if($resolve->extension_count == 0)
         {
-            $user = User::where('id', $resolve->user_id)->first();
             $user->score = $user->score+100;
         }
 
         else if($resolve->extension_count == 1)
         {
-            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+75;
         }
 
         else if($resolve->extension_count == 2)
         {
-            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+50;
         }
 
         else if($resolve->extension_count == 3)
         {
-            $user = User::where('id',  $resolve->user_id)->first();
             $user->score = $user->score+10;
         }
+
+        // $user->
         
         //make history
         $history = IssueResolve::create([
@@ -192,7 +192,7 @@ class ResolveController extends Controller
         $subscribers[config('roleWiseId.super_admin')] = 'unseen';
 
         $notification = Notification::create([
-            'message' => 'Congratulations to '.$resolve->user->name.'for successfully completing the issue of code: '.$resolve->issue->code,
+            'message' => 'Congratulations to '.$resolve->user->name.' for successfully completing the issue of code: '.$resolve->issue->code,
             'subscriber' => serialize($subscribers),
             'url' => env('APP_URL').'/my-solved/'.$resolve->user_id
         ]); 
@@ -206,7 +206,7 @@ class ResolveController extends Controller
         );
 
         
-        Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+        // Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
         return redirect()->route('issues.mySolved', ['user_id' => auth()->user()->id])->withMessage("Congratulations! Successfully Completed!");
     }
 
@@ -378,7 +378,7 @@ class ResolveController extends Controller
             'message' => 'Machine of issue code '.$resolve->issue->code.' has been shipped to '.$resolve->user->name.' - '.$resolve->user->center->city.' from '.$resolve->shipper->center->name.' at '.$resolve->shipped_date->format('d-M-Y')
         );
 
-        Mail::to($resolve->user->email)->send(new sendingEmail($data));
+        // Mail::to($resolve->user->email)->send(new sendingEmail($data));
 
         return redirect()->route('issues.toShip', ['user_id' => auth()->user()->id])->withMessage("Successfully updated");
     }
@@ -413,7 +413,7 @@ class ResolveController extends Controller
             'message' => 'Machine of issue code '.$resolve->issue->code.' received by '.$resolve->user->name.' - '.$resolve->user->center->city.' at '.Carbon::parse($resolve->received_date)->format('d-M-Y').' shipped at '.Carbon::parse($resolve->shipped_date)->format('d-M-Y')
         );
 
-        Mail::to($resolve->shipper->email)->send(new sendingEmail($data));
+        // Mail::to($resolve->shipper->email)->send(new sendingEmail($data));
         return redirect()->route('resolving_now', ['user_id' => auth()->user()->id]);
     }
 
@@ -462,8 +462,8 @@ class ResolveController extends Controller
             'message' => "The issue of issue code {$newResolve->issue->code} has been assigned to {$newResolve->user->name}"
         );
 
-        Mail::to($newResolve->user->email)->send(new sendingEmail($data));
-        Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+        // Mail::to($newResolve->user->email)->send(new sendingEmail($data));
+        // Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
     }
 
     public function sendForceAssignEmail($resolve)
@@ -474,6 +474,6 @@ class ResolveController extends Controller
             'message' => "{$resolve->user->name} gave up on the issue of code {$resolve->issue->code} and no one found to assign this task. You need to force assign."
         );
 
-        Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
+        // Mail::to(config('roleWiseId.super_admin_email'))->send(new sendingEmail($data));
     }
 }

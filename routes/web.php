@@ -24,9 +24,9 @@ use App\Http\Controllers\WinnerController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard.dashboard');
@@ -35,7 +35,8 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    // Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::controller(IssueController::class)->prefix('issues')->group(function () {
         Route::get('/', 'index')->name('issues.index');
         Route::get('/pending', 'pendingIndex')->name('issues.pendingIndex');

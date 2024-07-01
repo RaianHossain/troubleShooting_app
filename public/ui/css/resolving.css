@@ -1,3 +1,14 @@
-#check {
-    
+.navbar-custom {
+    background-color: #0748AB;
+}
+/* Modify brand and text color */
+ 
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: white;
+}
+
+.big-font {
+    font-size: 1.5rem;
+    font-weight: bold;
 }

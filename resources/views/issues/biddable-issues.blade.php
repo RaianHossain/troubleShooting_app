@@ -16,36 +16,7 @@
     @if(session()->has('message'))
         <div class="alert alert-success">
             {{ session()->get('message') }}
-        </div>
-
-        @if(isset($issues[0]) && session()->get('message') == 'Successfully uploaded')
-        <script>
-            const issueUploader = "<?php echo $issues[0]->user->name; ?>";
-            const issueUploadedFrom = "<?php echo $issues[0]->user->center->name; ?>";
-            const issueId = "<?php echo $issues[0]->id; ?>";
-            const base_url = "<?php echo $base_url; ?>";
-            const data = {
-                'subscriber': 'all',
-                'message' : `A new issue has been uploaded by ${issueUploader} from ${issueUploadedFrom}`,
-                'url' : `${base_url}/show/${issueId}`
-            }
-
-            fetch(base_url+'/api/make-notification', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
-        </script>
-
-        <script>
-            $('#submitButton').on('click', ()=>{
-                fetch(`http://127.0.0.1:8000/sendEmail`).then(response=>console.log(response))
-            });
-        </script>
-       
-        @endif
+        </div>        
     @endif
     
     <div class="card mb-4">
@@ -65,7 +36,7 @@
                         <th>Alarm</th>  
                         <th>Code</th>                      
                         <th>Description</th>
-                        <th>Action</th>
+                        <th style="width: 5%;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,7 +48,7 @@
                             <td>{{ $issue->alarm ?? '' }}</td>
                             <td>{{ $issue->code ?? '' }}</td>
                             <td style="width: 370px;">{{ $issue->description ?? '' }}</td>
-                            <td>
+                            <td style="width: 130px;">
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-warning">Show</a>
                                 @php
                                     $bidded = App\Models\Bid::where('issue_id', $issue->id)->where('user_id', auth()->user()->id)->first();

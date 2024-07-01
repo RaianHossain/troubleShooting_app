@@ -142,7 +142,7 @@ class BidController extends Controller
         $notification = Notification::create([
             'message' => $bid->user->name.' bidded for issue ->  Code: '.$bid->issue->code.'Center: '.$bid->issue->user->center->name,
             'subscriber' => serialize($subscribers),
-            'url' => env('APP_URL').'/bid/show-bids/'.$bid->issue_id
+            'url' => env('APP_URL').'/bids/show-bids/'.$bid->issue_id
         ]);
 
         $count = Bid::where('issue_id', $request->issue_id)->count();

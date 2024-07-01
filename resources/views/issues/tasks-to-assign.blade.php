@@ -53,7 +53,7 @@
                             <td style="width: 400px;">{{ $issue->description ?? '' }}</td>
                             <td>
                                 <a href="{{ route('issues.show', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-info">Show</a>
-                                <a href="{{ route('bids.showBids', ['issue_id' => $issue->id]) }}" class="btn btn-warning">Show Bids</a>
+                                <a href="{{ route('bids.showBids', ['issue_id' => $issue->id]) }}" class="btn btn-sm btn-warning">Show Bids</a>
                                 <form style="display:inline" action="{{ route('issues.delete', ['issue_id' => $issue->id]) }}" method="post">
                                     @csrf
                                     @method('delete')

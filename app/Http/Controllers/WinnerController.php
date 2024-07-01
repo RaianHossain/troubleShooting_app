@@ -66,6 +66,7 @@ class WinnerController extends Controller
                     'issue_id' => $winner->issue_id,
                     'bid_id' => $winner->id,
                     'position' => $sl,
+                    'position' => 1,
                     'extensionCount' => 0,
                 ]);   
                 if($sl == 1)
@@ -107,7 +108,7 @@ class WinnerController extends Controller
                         'extension_count'  => 0, 
                         'shipper_id' => $winner->issue->user_id,                   
                     ]);
-                }else{
+                }else if($winner->id != $bid_id){
                     $newWinner = Winner::create([
                         'endingAt' => $winner->sendBackDate,
                         'issue_id' => $winner->issue_id,
@@ -125,13 +126,13 @@ class WinnerController extends Controller
         $issue->status = 'assigned';
         $issue->update();
         
-        $data = array(
-            'subject' => "Issue Assigned",
-            'url' => "",
-            'message' => "You have been assigned to issue  {$issue->code}!"
-        );
-       // dd($resolve);
-        Mail::to($resolve->user->email)->send(new sendingEmail($data));
+    //     $data = array(
+    //         'subject' => "Issue Assigned",
+    //         'url' => "",
+    //         'message' => "You have been assigned to issue  {$issue->code}!"
+    //     );
+    //    // dd($resolve);
+    //     Mail::to($resolve->user->email)->send(new sendingEmail($data));
         return redirect()->route('issues.assignedIndex')->withMessage('Successfully Assigned');
 
     }

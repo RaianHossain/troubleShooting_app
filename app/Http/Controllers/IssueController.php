@@ -220,12 +220,20 @@ class IssueController extends Controller
         //     Mail::to($user->email)->send(new sendingEmail($data));
         // }
       
+        //newly added
+        $users = User::all();
+        $subscribers = array();
+        foreach($users as $user)
+        {
+            $subscribers[$user->id] = "unseen";
+        }
 
-        // $notification = Notification::create([
-        //     'message' => 'A new issue has been created by '.auth()->user()->name.' from '.auth()->user()->center->name,
-        //     'subscriber' => 'all',
-        //     'url' => url('').'/issues/show/'.$issue->id
-        // ]);
+        $notification = Notification::create([
+            'message' => 'A new issue has been created by '.auth()->user()->name.' from '.auth()->user()->center->name,
+            'subscriber' => serialize($subscribers),
+            'url' => url('').'/issues/show/'.$issue->id
+        ]);
+        //newly added
 
         return redirect()->route('issues.biddableIssues')->withMessage('Successfully uploaded');
 
