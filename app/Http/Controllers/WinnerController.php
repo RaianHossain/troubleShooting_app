@@ -55,7 +55,7 @@ class WinnerController extends Controller
 
     public function assign($issue_id, $bid_id=null)
     {
-        $winners = Bid::where('issue_id', $issue_id)->orderBy('score', 'DESC')->orderBy('id', 'ASC')->take(3)->get();
+        $winners = Bid::where('issue_id', $issue_id)->orderBy('id', 'ASC')->take(3)->get();
         if($bid_id == null)
         {
             $sl = 1;

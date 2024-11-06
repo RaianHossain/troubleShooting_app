@@ -35,6 +35,7 @@
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    @if(!is_Engineer())
                                     <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
                                         Issues
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -47,6 +48,7 @@
                                             <a class="nav-link text-white" href="{{ route('issues.doneIndex') }}">Done Issues</a>
                                         </nav>
                                     </div>
+                                    @endif
                                     <a class="nav-link collapsed text-white" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
                                         My desk
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>

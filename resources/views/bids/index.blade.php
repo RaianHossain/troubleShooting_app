@@ -19,7 +19,7 @@
     @if(isset($winners) && count($winners) > 0)
     <div class="w-50">
         <div class="card mb-4">
-            <div class="card-header bg-danger text-white">
+            <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Winner
             </div>
@@ -68,7 +68,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header  bg-danger text-white">
+        <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Bids
         </div>
@@ -76,7 +76,7 @@
 
         
             <table class="table table-bordered" id="bidsTable">
-                <thead class="bg-danger text-white">
+                <thead>
                     <tr>
                         <th>Sl#</th>
                         <th>Bidder</th>

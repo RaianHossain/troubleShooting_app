@@ -57,5 +57,32 @@ class NotificationController extends Controller
         $notification->update();
         return 'success';
     }
+
+    public function allNotifications()
+    {
+        // Get all notifications in descending order, with simple pagination
+        $allNotifications = Notification::orderBy('id', 'DESC')->get();
+
+        // Filter notifications for the current user
+        $notifications = $allNotifications->filter(function ($notification) {
+            $subscribers = unserialize($notification->subscriber);
+            return in_array(auth()->user()->id, array_keys($subscribers));
+        })->values(); // Reset keys to avoid gaps
+
+        // Manually paginate the filtered collection
+        $page = request()->get('page', 1);
+        $perPage = 10;
+        $paginatedNotifications = new \Illuminate\Pagination\LengthAwarePaginator(
+            $notifications->forPage($page, $perPage),
+            $notifications->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url()]
+        );
+
+        return view('dashboard.all-notifications', compact('paginatedNotifications'));
+    }
+
+
     
 }

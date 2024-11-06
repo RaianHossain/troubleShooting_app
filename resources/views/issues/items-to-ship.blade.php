@@ -22,7 +22,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header bg-danger text-white">
+        <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Items To Ship
 
@@ -31,7 +31,7 @@
 
         
             <table class="table table-bordered" id="toShipTable">
-                <thead class="bg-danger text-white">
+                <thead>
                     <tr>
                         <th>Sl#</th>
                         <th>Uploaded By</th>

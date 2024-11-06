@@ -55,7 +55,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/show/{issue_id}', 'show')->name('issues.show');
         Route::get('/items-to-ship/{user_id}', 'toShip')->name('issues.toShip');
         Route::get('/force-assign/issues', 'forceAssignIssues')->name('issues.force');
-
     });
     
     Route::controller(RoleController::class)->prefix('roles')->group(function () {
@@ -133,6 +132,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'create')->name('notifications.create');
         Route::delete('/delete/{notification_id}', 'delete')->name('notifications.delete');
         Route::post('/', 'store')->name('notifications.store');
+        Route::get('/all', 'allNotifications')->name('notifications.all');
+
     });
     
     // Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');

@@ -181,7 +181,7 @@ class IssueController extends Controller
             'description'   => $request->description,
             'steps_taken'   => $request->steps_taken,
             'status' => 'pending',
-            'center_id' => auth()->user()->center->id,
+            'center_id' => auth()->user()->center->id ?? null,
 
         ]);
 

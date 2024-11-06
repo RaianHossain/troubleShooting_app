@@ -18,17 +18,17 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <p>
-                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-sm" style="background-color: #008CBA; color: white" type="button" data-bs-toggle="collapse" data-bs-target="#requestCollapse" aria-expanded="false" aria-controls="collapseExample">
                             Extend Request
                         </button>  
 
-                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#giveUpCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-sm" style="background-color: #f44336; color: white" type="button" data-bs-toggle="collapse" data-bs-target="#giveUpCollapse" aria-expanded="false" aria-controls="collapseExample">
                             Give Up
                         </button>
 
                         {{--<a href="{{ route('resolves.giveup', ['resolve_id' => $resolvingNow->id]) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Give Up</a>--}}
             
-                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn btn-sm" style="background-color: #04AA6D; color: white" type="button" data-bs-toggle="collapse" data-bs-target="#completeCollapse" aria-expanded="false" aria-controls="collapseExample">
                             Complete
                         </button>                        
                     </p>

@@ -14,7 +14,7 @@
     </x-slot>
 
     <div class="card mb-4">
-        <div class="card-header bg-danger text-white">
+        <div class="card-header blue-bg text-white" style="background-color: #0f4abf">
             <i class="fas fa-table me-1"></i>
             Issues Create
 

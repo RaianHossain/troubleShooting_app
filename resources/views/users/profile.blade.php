@@ -13,7 +13,7 @@
     </div>
     <div class="row m-5">
         <div class="col-md-4 text-center border bg-light">
-            <img src="https://www.blackswandesigns.co/wp-content/uploads/bfi_thumb/female-avatar-profile-picture-vector-female-avatar-profile-picture-vector-102690279-pgvgl0nwkupdn1k5hx6lcjng11hx6jsd77q7tm0sgc.jpg" alt="something went wrong">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Profile_photo_placeholder_-_partially_smooth_edges.svg" alt="something went wrong" style="width: 40%; padding: 3px">
             <h1 > {{ $user->name }} </h1>
         </div>
         <div class="col-md-8 border bg-light">

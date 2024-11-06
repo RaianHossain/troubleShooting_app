@@ -22,7 +22,7 @@
     @endif
     
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between  bg-danger text-white">
+        <div class="card-header d-flex justify-content-between text-white" style="background-color: #0f4abf">
             <div>
                 <i class="fa fa-exclamation-circle me-1"></i>
                 Issues
@@ -34,7 +34,7 @@
                 @if(isset($bidded))
                 <a href="#" class="btn px-5 btn-success">Bidded</a>  
                 @else
-                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-info px-5">Bid</a>  
+                <a href="{{ route('bids.bidAnIssue', ['issue_id' => $issue->id]) }}" class="btn btn-warning px-5">Bid</a>  
                 @endif
             </div>
         </div>

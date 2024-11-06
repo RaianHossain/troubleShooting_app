@@ -176,7 +176,7 @@ class ResolveController extends Controller
             $user->score = $user->score+10;
         }
 
-        // $user->
+        $user->update();
         
         //make history
         $history = IssueResolve::create([
